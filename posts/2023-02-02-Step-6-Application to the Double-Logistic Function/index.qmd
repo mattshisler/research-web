@@ -1,0 +1,28 @@
+---
+title: "Step 6 - Application to the (orignal) Double-logistic function"
+description: "TODO: "
+author:
+  - name: Matthew Shisler
+    affiliation: North Carloina State University - Department of Statistics
+    affiliation-url: https://statistics.sciences.ncsu.edu/ 
+categories: [Bayesian, MCMC, Hierarchical Model] # self-defined categories
+draft: false 
+format:
+  html: 
+    code-fold: true
+execute: 
+  cache: true
+---
+
+
+```{r}
+#| label: load-packages
+#| output: false
+#| code-summary: "Code: Load the packages"
+
+library(tictoc)
+library(Rfast)
+library(numDeriv)
+```
+
+TODO

@@ -1,0 +1,193 @@
+---
+title: "Step 1 - Bayesian Hierarchical Linear Regression"
+description: "Adding another level to the linear model."
+author:
+  - name: Matthew Shisler
+    affiliation: North Carloina State University - Department of Statistics
+    affiliation-url: https://statistics.sciences.ncsu.edu/ 
+categories: [Bayesian, MCMC, Hierarchical Model] # self-defined categories
+draft: false 
+format:
+  html: 
+    code-fold: true
+execute: 
+  cache: true
+---
+
+
+```{r}
+#| label: load-packages
+#| output: false
+#| code-summary: "Code: Load the packages"
+
+library(tictoc)
+library(Rfast)
+```
+
+Consider an extension of the setting from Step 1 where $\mathbf{Y}_i$ is an $n_i \times 1$ response vector , $\mathbf{X}_i$ an $n_i \times p$ design matrix, and $\boldsymbol\delta_i$ a $p \times 1$ parameter vector corresponding to subject $i = 1,\dots,N$ (where the subject will later be the year). I did not index year using "$t$" because later we will define $t_{ij}$ to be the day of year $i$ on which the $j$th measurement of $\mathbf{Y}_i$ was collected.
+
+The parameters $\boldsymbol\delta_i$ are drawn from a multivariate normal random effects distribution with mean $\beta$ and covariance matrix $\mathbf{\Omega}$. The entries of $\mathbf{Y}_i$ are mutually independent with constant variance $\sigma^2$, $\text{Cov}(\mathbf{Y}_i) = \sigma^2 \mathbf{I}_n$ for all $i$. Further, $\mathbf{Y}_1,\dots,\mathbf{Y}_N$ are mutually independent.
+
+\begin{align*}
+\mathbf{Y}_i &\sim \text{Normal}_{n_i}\left(\mathbf{X}_i\boldsymbol\delta_i, \; \sigma^2 \mathbf{I}_{n_i}\right)\\
+\boldsymbol\delta_i &\sim \text{Normal}_p\left(\boldsymbol\beta, \; \mathbf{\Omega}\right)
+\end{align*}
+
+In this case we will assume $\mathbf{\Omega}$ is diagonal and let $\omega_{kk}$ be the $k$th diagonal element. Next specify priors,
+\begin{align*}
+\boldsymbol\beta &\sim \text{Normal}_p\left(\boldsymbol\mu, \; \mathbf{\Lambda}\right)\\
+\omega_{kk} &\sim \text{InvGamma}\left(a_{k}, \; b_{k} \right)\\
+\sigma^2 &\sim \text{InvGamma}\left(a, \; b\right)
+\end{align*}
+
+Note, for simplicity there is no linear trend in the random effects distribution for $\boldsymbol\delta_i$. Also, I've left its covariance to be diagonal, just to avoid the Inverse Wishart prior for now. This way we can update the diagonal elements of $\mathbf{\Omega}$ individually.
+
+The full conditionals in this model are. . . 
+
+\begin{align*}
+\boldsymbol\delta_i|\text{``rest"} &\sim \text{Normal}_p(\mathbf{V}_i^{-1}\mathbf{M}_i, \mathbf{V}_i^{-1})\\
+\mathbf{V}_i &= \frac{1}{\sigma^2} \mathbf{X}_i^T\mathbf{X}_i + \mathbf{\Omega}^{-1}\\
+\mathbf{M}_i &= \frac{1}{\sigma^2} \mathbf{X}_i^T\mathbf{Y}_i + \mathbf{\Omega}^{-1}\boldsymbol\beta\\\\
+\boldsymbol\beta|\text{``rest"} &\sim \text{Normal}_p(\mathbf{V}_\beta^{-1}\mathbf{M}_\beta, \mathbf{V}_\beta^{-1})\\
+\mathbf{V}_\beta &= N\mathbf{\Omega}^{-1} + \mathbf{\Lambda}^{-1}\\
+\mathbf{M}_\beta &= \mathbf{\Omega}^{-1}\sum_{i=1}^N\boldsymbol\delta_i + \mathbf{\Lambda}^{-1}\boldsymbol\mu\\\\
+\omega_{kk}|\text{``rest"} &\sim \text{InvGamma}(A_k,B_k)\\
+A_k &= N/2 + a_k\\
+B_k &= \frac{1}{2}\sum_{i=1}^N (\delta_{ik} - \beta_k)^2 + b_k\\\\
+\sigma^2|\text{"rest"} &\sim \text{InvGamma}(A,B)\\
+A &= \frac{1}{2}\sum_{i=1}^N n_i + a\\
+B &= \frac{1}{2}\sum_{i=1}^N \sum_{j=1}^{n_i} (Y_{ij} - \mathbf{X}_i\boldsymbol\delta_i)^2 + b
+\end{align*}
+
+Simulate some data from this model. In this case will we set $N = 100$, $p = 2$, and $n_i = n = 100$. Then we will implement the Gibbs sampler.
+```{r}
+#| code-summary: "Simulate some data"
+
+N <- 100
+p <- 2
+n <- rep(100, N)
+
+beta0  <- rnorm(p, mean = 0, sd = 5)
+Omega0 <- diag(c(2,1))
+
+delta0  <- t(Rfast::rmvnorm(N, beta0, Omega0))
+sigma20 <- 1
+
+Y <- list()
+X <- list()
+for (i in 1:N){
+  X[[i]] <- matrix(c(rep(1,n[i]), rnorm(n[i]*(p-1))), nrow = n[i], ncol = p)
+  Y[[i]] <- matrix(rnorm(n[i], mean = X[[i]]%*%delta0[,i], sd = sqrt(sigma20)), ncol=1)
+}
+```
+
+```{r}
+#| code-summary: "Run the Gibbs sampler"
+
+# set-up
+niter <- 5000
+keep_delta  <- array(NA, dim = c(p, N, niter))
+keep_beta   <- matrix(NA, nrow = niter, ncol = p)
+keep_Omega  <- matrix(NA, nrow = niter, ncol = p)
+keep_sigma2 <- rep(NA, niter)
+
+# initial values
+delta  <- matrix(0, nrow = p, ncol = N)
+beta   <- rep(10, p)
+sigma2 <- 3
+Omega  <- diag(c(5,5))
+keep_delta[,,1] <- delta
+keep_beta[1,]   <- beta
+keep_Omega[1,]  <- diag(Omega)
+keep_sigma2[1]  <- sigma2
+
+
+# prior parameters
+mu    <- rep(0, p)
+Lambda_inv <- diag(rep(1e-06,p))
+a     <- 0.1
+b     <- 0.1
+Ao    <- N/2 + a
+As    <- sum(n)/2 + a
+
+# pre-computes
+XtX <- list()
+XtY <- list()
+for (k in 1:N){
+  XtX[[k]] <- t(X[[k]])%*%X[[k]]
+  XtY[[k]] <- t(X[[k]])%*%Y[[k]]
+}
+Lmu <- Lambda_inv%*%mu
+
+tic()
+# Gibbs Loop
+for (i in 2:niter){
+  
+  Omega_inv <- diag(1/diag(Omega))
+  
+  # sample deltas
+  for (k in 1:N){
+    M         <- (1/sigma2)*XtY[[k]] + Omega_inv%*%beta
+    V_inv     <- chol2inv(chol((1/sigma2)*XtX[[k]] + Omega_inv))
+    delta[,k] <- V_inv%*%M+t(chol(V_inv))%*%rnorm(p)
+  }
+  
+  # sample beta
+  M     <- Omega_inv%*%rowSums(delta0) + Lmu
+  V_inv <- solve(N*Omega_inv + Lambda_inv)
+  beta  <- V_inv%*%M+t(chol(V_inv))%*%rnorm(p)
+  
+  # sample omegas
+  for (j in 1:p){
+    Bo <- sum((delta[j,] - beta[j])^2)/2 + b
+    Omega[j,j] <- 1/rgamma(1, Ao, Bo)
+  }
+  
+  # sample sigma2
+  SSE <- 0
+  for (k in 1:N){
+    SSE <- SSE + sum((Y[[k]] - X[[k]]%*%delta[,k])^2)
+  }
+  Bs <- SSE/2 + b
+  sigma2 <- 1/rgamma(1, As, Bs)
+  
+  # store everything
+  keep_delta[,,i] <- delta
+  keep_beta[i,]   <- beta
+  keep_Omega[i,]  <- diag(Omega)
+  keep_sigma2[i]  <- sigma2
+}
+toc()
+```
+This sampler takes about 20 seconds to run on my machine. That seems slow relative to JAGS. I'm sure there are some computational tricks that I can employ. The way I am computing the overall SSE to update $\sigma^2$ seems particularly naive.
+
+Inspect some trace plots. The true value of the respective parameter is represented by a red horizontal line. Again, I've included the poor initial guess to make the convergence more obvious.
+```{r}
+#| code-summary: "Construct trace plots"
+
+win <- 1:niter
+
+par(mfrow = c(2,2))
+
+for (k in 1:p){
+  plot(win, keep_beta[win,k], type = "l",
+       ylab = bquote(beta[.(k)]),
+       xlab = "iter")
+  abline(h = beta0[k], col = "red")
+}
+
+for (k in 1:p){
+  plot(win, keep_Omega[win, k],   type = "l",
+       ylab = bquote(omega[.(k+10*k)]),
+       xlab = "iter")
+  abline(h = Omega[k,k], col = "red")
+}
+
+# par(mfrow = c(1,1))
+
+plot(win, keep_sigma2[win],   type = "l",
+     ylab = bquote(sigma^2),
+     xlab = "iter")
+abline(h = sigma20, col = "red")
+
+```

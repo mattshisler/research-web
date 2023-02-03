@@ -1,0 +1,227 @@
+---
+title: "Step 2 - One Parent Design Matrix"
+description: "Here we extend to the situation of one parent design matrix from which rows are drawn to construct design matrices for each response vector."
+author:
+  - name: Matthew Shisler
+    affiliation: North Carloina State University - Department of Statistics
+    affiliation-url: https://statistics.sciences.ncsu.edu/ 
+categories: [Bayesian, MCMC, Hierarchical Model] # self-defined categories
+draft: false 
+format:
+  html: 
+    code-fold: true
+execute: 
+  cache: true
+---
+
+
+```{r}
+#| label: load-packages
+#| output: false
+#| code-summary: "Code: Load the packages"
+
+library(tictoc)
+library(Rfast)
+```
+
+The setting is the same as in step 1 only now we will generate a single "parent" design matrix, $\mathbf{X}$, which is $m \times p$ and $m \ge n_i$ for all $i$. That is to say we can't have more rows in a subject's design matrix than the parent matrix. To implement this we will generate the parent design matrix, then sample $n_i$ integers from the sequence $1,\dots, m$ and extract the corresponding rows of $\mathbf{X}$ to construct a subject's design matrix, $\widetilde{\mathbf{X}}_i$.
+
+The parameters $\boldsymbol\delta_i$ are drawn from a multivariate normal random effects distribution with mean $\beta$ and covariance $\mathbf{\Omega}$. The entries of $\mathbf{Y}_i$ are mutually independent with constant variance $\sigma^2$, $\text{Cov}(\mathbf{Y}_i) = \sigma^2 \mathbf{I}_n$ for all $i$. Further, $\mathbf{Y}_1,\dots,\mathbf{Y}_N$ are mutually independent.
+
+\begin{align*}
+\mathbf{Y}_i &\sim \text{Normal}_{n_i}\left(\widetilde{\mathbf{X}}_i\boldsymbol\delta_i, \; \sigma^2 \mathbf{I}_{n_i}\right)\\
+\boldsymbol\delta_i &\sim \text{Normal}_p\left(\boldsymbol\beta, \; \mathbf{\Omega}\right)
+\end{align*}
+
+In this case we will assume $\mathbf{\Omega}$ is diagonal and let $\omega_{kk}$ be the $k$th diagonal element. Next specify priors,
+\begin{align*}
+\boldsymbol\beta &\sim \text{Normal}_p\left(\boldsymbol\mu, \; \mathbf{\Lambda}\right)\\
+\omega_{kk} &\sim \text{InvGamma}\left(a_{k}, \; b_{k} \right)\\
+\sigma^2 &\sim \text{InvGamma}\left(a, \; b\right)
+\end{align*}
+
+Note, for simplicity there is no linear trend in the random effects distribution for $\boldsymbol\delta_i$. Also, I've left its covariance to be diagonal, just to avoid the Inverse Wishart prior for now. This way we can update the diagonal elements of $\mathbf{\Omega}$ individually.
+
+The full conditionals in this model are. . . 
+
+\begin{align*}
+\boldsymbol\delta_i|\text{ rest} &\sim \text{Normal}_p(\mathbf{V}_i^{-1}\mathbf{M}_i, \mathbf{V}_i^{-1})\\
+\mathbf{V}_i &= \frac{1}{\sigma^2} \widetilde{\mathbf{X}}_i^T\widetilde{\mathbf{X}}_i + \mathbf{\Omega}^{-1}\\
+\mathbf{M}_i &= \frac{1}{\sigma^2} \widetilde{\mathbf{X}}_i^T\mathbf{Y}_i + \mathbf{\Omega}^{-1}\boldsymbol\beta\\\\
+\boldsymbol\beta|\text{ rest} &\sim \text{Normal}_p(\mathbf{V}_\beta^{-1}\mathbf{M}_\beta, \mathbf{V}_\beta^{-1})\\
+\mathbf{V}_\beta &= N\mathbf{\Omega}^{-1} + \mathbf{\Lambda}^{-1}\\
+\mathbf{M}_\beta &= \mathbf{\Omega}^{-1}\sum_{i=1}^N\boldsymbol\delta_i + \mathbf{\Lambda}^{-1}\boldsymbol\mu\\\\
+\omega_{kk}|\text{ rest} &\sim \text{InvGamma}(A_k,B_k)\\
+A_k &= N/2 + a_k\\
+B_k &= \frac{1}{2}\sum_{i=1}^N (\delta_{ik} - \beta_k)^2 + b_k\\\\
+\sigma^2|\text{ rest} &\sim \text{InvGamma}(A,B)\\
+A &= \frac{1}{2}\sum_{i=1}^N n_i + a\\
+B &= \frac{1}{2}\sum_{i=1}^N (\mathbf{Y}_i - \widetilde{\mathbf{X}}_i\boldsymbol\delta_i)^T(\mathbf{Y}_i - \widetilde{\mathbf{X}}_i\boldsymbol\delta_i) + b
+\end{align*}
+
+
+Simulate some data from this model. In this case will we set $N = 100$, $p = 2$, $n_i = n = 100$, and $m = 400$. 
+```{r}
+#| code-summary: "Simulate the data"
+
+m <- 400
+N <- 100
+p <- 2
+n <- rep(100, N)
+
+Xp <- matrix(c(rep(1,m), rnorm(m*(p-1), mean = 0, sd = 5)), nrow = m, ncol = p)
+
+beta0  <- rnorm(p, mean = 0, sd = 5)
+Omega0 <- diag(c(2,1))
+
+delta0  <- t(Rfast::rmvnorm(N, beta0, Omega0))
+sigma20 <- 1
+
+Y <- list()
+X <- list()
+for (i in 1:N){
+  subject_rows <- sample(1:m, n[i])
+  X[[i]] <- Xp[subject_rows,]
+  Y[[i]] <- matrix(rnorm(n[i], mean = X[[i]]%*%delta0[,i], sd = sqrt(sigma20)), ncol=1)
+}
+```
+
+The Gibbs sampler is identical to that found in Step 1.
+```{r}
+#| code-summary: "Run the Gibbs Sampler"
+
+# set-up
+niter <- 5000
+keep_delta  <- array(NA, dim = c(p, N, niter))
+keep_beta   <- matrix(NA, nrow = niter, ncol = p)
+keep_Omega  <- matrix(NA, nrow = niter, ncol = p)
+keep_sigma2 <- rep(NA, niter)
+
+# initial values
+delta  <- matrix(0, nrow = p, ncol = N)
+beta   <- rep(10, p)
+sigma2 <- 3
+Omega  <- diag(c(5,5))
+keep_delta[,,1] <- delta
+keep_beta[1,]   <- beta
+keep_Omega[1,]  <- diag(Omega)
+keep_sigma2[1]  <- sigma2
+
+
+# prior parameters
+mu    <- rep(0, p)
+Lambda_inv <- diag(rep(1e-06,p))
+a     <- 0.1
+b     <- 0.1
+Ao    <- N/2 + a
+As    <- sum(n)/2 + a
+
+# pre-computes
+XtX <- list()
+XtY <- list()
+for (k in 1:N){
+  XtX[[k]] <- t(X[[k]])%*%X[[k]]
+  XtY[[k]] <- t(X[[k]])%*%Y[[k]]
+}
+Lmu <- Lambda_inv%*%mu
+
+tic()
+# Gibbs Loop
+for (i in 2:niter){
+  
+  Omega_inv <- diag(1/diag(Omega))
+  
+  # sample deltas
+  for (k in 1:N){
+    M         <- (1/sigma2)*XtY[[k]] + Omega_inv%*%beta
+    V_inv     <- chol2inv(chol((1/sigma2)*XtX[[k]] + Omega_inv))
+    delta[,k] <- V_inv%*%M+t(chol(V_inv))%*%rnorm(p)
+  }
+  
+  # sample beta
+  M     <- Omega_inv%*%rowSums(delta0) + Lmu
+  V_inv <- solve(N*Omega_inv + Lambda_inv)
+  beta  <- V_inv%*%M+t(chol(V_inv))%*%rnorm(p)
+  
+  # sample omegas
+  for (j in 1:p){
+    Bo <- sum((delta[j,] - beta[j])^2)/2 + b
+    Omega[j,j] <- 1/rgamma(1, Ao, Bo)
+  }
+  
+  # sample sigma2
+  SSE <- 0
+  for (k in 1:N){
+    SSE <- SSE + sum((Y[[k]] - X[[k]]%*%delta[,k])^2)
+  }
+  Bs <- SSE/2 + b
+  sigma2 <- 1/rgamma(1, As, Bs)
+  
+  # store everything
+  keep_delta[,,i] <- delta
+  keep_beta[i,]   <- beta
+  keep_Omega[i,]  <- diag(Omega)
+  keep_sigma2[i]  <- sigma2
+}
+toc()
+```
+
+
+```{r}
+#| code-summary: "Construct Trace Plots"
+
+win <- 1:niter
+
+par(mfrow = c(2,2))
+
+for (k in 1:p){
+  plot(win, keep_beta[win,k], type = "l",
+       ylab = bquote(beta[.(k)]),
+       xlab = "iter")
+  abline(h = beta0[k], col = "red")
+}
+
+for (k in 1:p){
+  plot(win, keep_Omega[win, k],   type = "l",
+       ylab = bquote(omega[.(k)]^2),
+       xlab = "iter")
+  abline(h = Omega[k,k], col = "red")
+}
+
+par(mfrow = c(1,1))
+
+plot(win, keep_sigma2[win],   type = "l",
+     ylab = bquote(sigma^2),
+     xlab = "iter")
+abline(h = sigma20, col = "red")
+
+```
+
+```{r}
+#| code-summary: "Construct Trace Plots"
+
+win <- 1:niter
+
+par(mfrow = c(2,2))
+param_sample <- sample(1:100,4)
+
+for (i in param_sample){
+  subscr <- paste0("1,",i)
+  plot(win, keep_delta[1,i,win], type = "l",
+       ylab = bquote(delta[.(subscr)]),
+       xlab = "iter")
+  abline(h = delta0[1,i], col = "red")
+}
+
+param_sample <- sample(1:100,4)
+
+for (i in param_sample){
+  subscr <- paste0("2,",i)
+  plot(win, keep_delta[2,i,win], type = "l",
+       ylab = bquote(delta[.(subscr)]),
+       xlab = "iter")
+  abline(h = delta0[2,i], col = "red")
+}
+```
+
+Okay, this appears to be working as well based on the trace plots alone. In the next step we will add a linear trend to the underlying distribution for $\boldsymbol\delta_i$.
