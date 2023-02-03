@@ -1,0 +1,40 @@
+---
+title: "Matthew Shisler"
+about:
+  template: trestles
+  image: about_pic.jpg
+  links:
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/matthew-shisler/
+    - icon: github
+      text: Github
+      href: https://github.com/mattshisler
+---
+
+Matthew Shisler is a statistics Ph.D. student at North Carolina State University in Raleigh, NC. His research interests lie in the application of statistical methods to spatio-temporal data, rating systems, and networks.\
+
+He is a military officer serving as an Operations Research Analyst for the U.S. Air Force and an Admissions Liaison Officer for the U.S. Air Force Academy.
+
+## Education
+
+![](ncstate_icon.png){width=30}
+**North Carolina State University** | Raleigh, NC\
+Ph.D. in *Statistics* | in progress
+
+![](purdue_icon.png){width=33}
+**Purdue University** | West Lafayette, IN\
+M.S. in *Industrial Engineering* | 2019
+
+![](usafa_icon.png){width=28}
+**U.S. Air Force Academy** | CO Springs, CO\
+B.S. in *Applied Mathematics* | 2017
+
+## Experience
+
+**United States Air Force** | *various locations*\
+Operations Research Analyst | 2017 - present
+
+**United States Air Force** | *various locations*\
+U.S. Air Force Academy Admissions Officer | 2021 - present
+
