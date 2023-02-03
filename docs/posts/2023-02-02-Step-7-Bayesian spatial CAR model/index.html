@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matthew Shisler">
+<meta name="description" content="A basic description and example of the spatial conditionally autoregressive model for areal data.">
+
+<title>MS - Step 7 - Areal data and the spatial CAR model - Basic Example</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">MS</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../posts.html">
+ <span class="menu-text">Research</span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#a-brief-introduction" id="toc-a-brief-introduction" class="nav-link active" data-scroll-target="#a-brief-introduction">A Brief Introduction</a></li>
+  <li><a href="#what-is-areal-data" id="toc-what-is-areal-data" class="nav-link" data-scroll-target="#what-is-areal-data">What is areal data?</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Step 7 - Areal data and the spatial CAR model - Basic Example</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Bayesian</div>
+    <div class="quarto-category">MCMC</div>
+    <div class="quarto-category">Spatial</div>
+    <div class="quarto-category">CAR</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    A basic description and example of the spatial conditionally autoregressive model for areal data.
+  </div>
+</div>
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    Matthew Shisler 
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://statistics.sciences.ncsu.edu/">
+            North Carloina State University - Department of Statistics
+            </a>
+          </p>
+      </div>
+    </div>
+
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+<details>
+<summary>Code: Load the packages</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Matrix)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tictoc)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(extraDistr)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CARBayes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="a-brief-introduction" class="level2">
+<h2 class="anchored" data-anchor-id="a-brief-introduction">A Brief Introduction</h2>
+<p>Here we’re going to examine the spatial CAR model. CAR stands for Conditionally Autoregressive. The <em>spatial</em> CAR model is in a way an extension of autoregressive models for time series data. Time series data is typically 1-dimensional (in time) and the observations have a natural ordering in the sense that observations can be ordered by the time they were observed. Spatial data can be any dimension and do not necessarily have a natural ordering.</p>
+</section>
+<section id="what-is-areal-data" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-areal-data">What is areal data?</h2>
+<p>A CAR model is commonly applied to areal data. That is data where the spatial domain <span class="math inline">\(D\)</span> is partitioned into a finite number of blocks or <em>areas</em>. A common example is the partition of the United States of America into states, census tracts, or counties. A measurement is then collected for each areal unit.</p>
+<p>The spatial domain is <span class="math inline">\(D\)</span>.</p>
+<p>The areal units are <span class="math inline">\(B_i\)</span> for <span class="math inline">\(i = 1,\dots n\)</span>.</p>
+<p>The measurements are <span class="math inline">\(Z_i \equiv Z(B_i)\)</span> for <span class="math inline">\(i = 1, \dots, n\)</span>.</p>
+<p>Before we dive into the distributional assumptions related to the CAR model, something must be said about the structure of the blocks. Namely we must define some notion of <em>proximity</em> from one block to the next. It’s difficult in general to do this, particularly for an irregular partition of the spatial domain. The easiest approach is to define and <em>adjacency</em> matrix which captures which blocks are bordering other blocks. If there are <span class="math inline">\(n\)</span> blocks, then this adjacency matrix <span class="math inline">\(\mathbf{W}\)</span> is <span class="math inline">\(n \times n\)</span> and</p>
+<p><span class="math display">\[
+w_{ij} =
+\begin{cases}
+1 \quad \text{if } B_i \text{ shares a border with } B_j,\\
+0 \quad \text{otherwise}.
+\end{cases}
+\]</span> By convention we say that an areal unit does not share a border with itself hence <span class="math inline">\(w_{ii} = 0\)</span> for all <span class="math inline">\(i = 1, \dots, n\)</span>.</p>
+<p>Let’s define our own spatial domain and partition it into some very basic units.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>spat_domain <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span>n, <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>n)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>spat_domain<span class="sc">$</span>label <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>(n<span class="sc">*</span>n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Here is the spatial domain. It is a regular lattice with 16 areal units.</p>
+<div class="cell" data-layout-align="center">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(spat_domain) <span class="sc">+</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="fu">aes</span>(x, y), <span class="at">linewidth =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"grey50"</span>, <span class="at">fill=</span><span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(x, y, <span class="at">label=</span>label), <span class="at">size =</span> <span class="dv">15</span>) <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>() <span class="sc">+</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-lattice-example" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-lattice-example-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: A spatial domain partitioned into a regular lattice with areal units labeled <span class="math inline">\(1,...,n\)</span>.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Next we want to define a neighborhood matrix for this regular lattice. A small digression, the convention used to label the areal units will impact the structure of this matrix. Is there a “best” structure? That remains to be seen. For now, let’s stick with the adjacency matrix that arises from the ordering in figure above. Adjacency matrices are abundant in graph theory. We’ll use the package <code>igraph</code> to construct the adjacency matrix for the areal units above. This is accomplished by first using <code>igraph</code> to create a 4 <span class="math inline">\(\times\)</span> 4 lattice graph, then using the <code>as_adjacency_matrix</code> function to convert the graph object to a sparse matrix.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>spat_domain_g <span class="ot">&lt;-</span> <span class="fu">make_lattice</span>(<span class="fu">c</span>(n,n), <span class="at">mutual =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">as_adjacency_matrix</span>(spat_domain_g, <span class="at">sparse=</span><span class="dv">1</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>W</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>16 x 16 sparse Matrix of class "dgCMatrix"
+                                     
+ [1,] . 1 . . 1 . . . . . . . . . . .
+ [2,] 1 . 1 . . 1 . . . . . . . . . .
+ [3,] . 1 . 1 . . 1 . . . . . . . . .
+ [4,] . . 1 . . . . 1 . . . . . . . .
+ [5,] 1 . . . . 1 . . 1 . . . . . . .
+ [6,] . 1 . . 1 . 1 . . 1 . . . . . .
+ [7,] . . 1 . . 1 . 1 . . 1 . . . . .
+ [8,] . . . 1 . . 1 . . . . 1 . . . .
+ [9,] . . . . 1 . . . . 1 . . 1 . . .
+[10,] . . . . . 1 . . 1 . 1 . . 1 . .
+[11,] . . . . . . 1 . . 1 . 1 . . 1 .
+[12,] . . . . . . . 1 . . 1 . . . . 1
+[13,] . . . . . . . . 1 . . . . 1 . .
+[14,] . . . . . . . . . 1 . . 1 . 1 .
+[15,] . . . . . . . . . . 1 . . 1 . 1
+[16,] . . . . . . . . . . . 1 . . 1 .</code></pre>
+</div>
+</div>
+<p>With the spatial domain defined and partitioned, we can continue by simulating spatial data. The most basic case assumes spatial independence.Let’s also make it a bit more interesting by bumping up the number of areal units. Now it will probably be a lot easier to spot spatial dependence by a plot of the data alone.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">70</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>spat_domain <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span>n, <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>n)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>spat_domain<span class="sc">$</span>z <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n<span class="sc">^</span><span class="dv">2</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(spat_domain) <span class="sc">+</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="fu">aes</span>(x, y, <span class="at">fill=</span>z)) <span class="sc">+</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradientn</span>(<span class="at">colors =</span> <span class="fu">viridis</span>(<span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>() <span class="sc">+</span> </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We want to simulate data <em>with</em> spatial dependence. We can do this from the CAR model.</p>
+<p>Let’s turn to working with the CAR model through a simple example. Let</p>
+<p><span class="math display">\[
+Z_i =  \mathbf{x}^T_i\beta + \phi_i + \varepsilon_i
+\]</span> Here we have a covariate vector <span class="math inline">\(\mathbf{x}_i\)</span> indexed by spatial location <span class="math inline">\(i\)</span>, <span class="math inline">\(\phi_i\)</span> is a spatial random effect and <span class="math inline">\(\varepsilon_i\)</span> is a random error associated with the measurement at location <span class="math inline">\(i\)</span> (later we assume to be normal with zero mean and constant variance). The defining characteristic of the CAR model is to specify a spatial structure through the conditional distributions of <span class="math inline">\(\phi_i\)</span> accordingly</p>
+<p><span class="math display">\[
+\phi_i|\phi_{j, \; j \ne i} \sim \text{N}\left(\textstyle{\frac{1}{n-1}\sum}_{j \ne i} \phi_j, \tau^2_i\right)
+\]</span> That is the conditional mean of <span class="math inline">\(\phi_i\)</span> is just the average of the spatial random effects across all other locations. That being said, it’s probably not reasonable to condition on ALL other locations. Paraphrasing Tobler’s First Law of Geography, “everything is related to everything else, but near things are more related than distant things.”</p>
+<p>Perhaps we don’t need to condition on “distant things.” Instead we’ll condition on only the locations we’ve defined as the neighbors of location <span class="math inline">\(i\)</span>. Let <span class="math inline">\(\mathcal{N}_i\)</span> be the set of locations that are considered neighbors with location <span class="math inline">\(i\)</span>. Then we specify the conditional distribution as</p>
+<p><span class="math display">\[
+\phi_i|\phi_{j, j \in \mathcal{N}_i} \sim \text{N}\left(\textstyle{\frac{1}{|\mathcal{N}_i|}\sum}_{j \in \mathcal{N}_i} \phi_j, \tau^2_i\right)
+\]</span> Practically, there are too many parameters in this model. Namely we have specified a location-specific variance, <span class="math inline">\(\tau^2_i\)</span>, in each conditional distribution. We can simplify the model by specifying the conditional variance as a function of a parameter shared across locations and the number of neighbors of a given location. This structure is intuitive because we would expect the conditional variance to decrease as the number of neighbors increases. The new conditional distributions are specified as</p>
+<p><span class="math display">\[
+\phi_i|\phi_{j, j \in \mathcal{N}_i} \sim \text{N}\left(\textstyle{\frac{1}{|\mathcal{N}_i|}\sum}_{j \in \mathcal{N}_i} \phi_j, \frac{\tau^2}{|\mathcal{N}_i|}\right)
+\]</span> At the end of the day it is possible to write the joint distribution of the spatial random effects from the conditional distributions. This is called <em>compatibility</em> and note that it is not guaranteed! Let <span class="math inline">\(\boldsymbol\phi = (\phi_i,\dots,\phi_n)\)</span>, <span class="math inline">\(\mathbf{M}\)</span> be an <span class="math inline">\(n \times n\)</span> diagonal matrix containing the number of neighbors for each spatial location on its diagonal, and again <span class="math inline">\(\mathbf{W}\)</span> is our proximity matrix we defined earlier. Finally, we need to introduce another parameter <span class="math inline">\(\rho\)</span> to ensure that the distribution is proper (details in the BCG 2003).</p>
+<p><span class="math display">\[
+\boldsymbol\phi \sim \text{N}\left(\boldsymbol{0}, \tau^2(\mathbf{M} - \rho \mathbf{W})^{-1}\right)
+\]</span> The matrix <span class="math inline">\(\mathbf{M}\)</span> is fairly easy to obtain. Its diagonal is just the row sums from <span class="math inline">\(\mathbf{W}\)</span> and all other terms set to 0.</p>
+<p>Let’s try to simulate some data from this model. First we’ll define the spatial domain.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>n      <span class="ot">&lt;-</span> <span class="dv">70</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>nsites <span class="ot">&lt;-</span> n<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>spat_domain <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span>n, <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>n)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>spat_domain<span class="sc">$</span>label <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>nsites</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>spat_domain_g <span class="ot">&lt;-</span> <span class="fu">make_lattice</span>(<span class="fu">c</span>(n,n), <span class="at">mutual =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">as_adjacency_matrix</span>(spat_domain_g, <span class="at">sparse=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Next define some parameters and draw from the spatial random effects distribution.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>tau2 <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>rho <span class="ot">&lt;-</span> <span class="fl">0.99</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>M   <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">rowSums</span>(W))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>spat_prec <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">/</span>tau2)<span class="sc">*</span>(M<span class="sc">-</span>rho<span class="sc">*</span>W) <span class="co"># swap this with something else. . .</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>spat_domain<span class="sc">$</span>phi <span class="ot">&lt;-</span> <span class="fu">backsolve</span>(<span class="fu">chol</span>(spat_prec), <span class="fu">matrix</span>(<span class="fu">rnorm</span>(nsites), <span class="at">nrow =</span> nsites))</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># spat_cov &lt;- tau^{-2}*solve(M-rho*W)</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># phi &lt;- MASS::mvrnorm(1, mu = rep(0,n^2), Sigma = spat_cov)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Next sample the observations from the data distribution.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>X    <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, nsites)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">2</span>), <span class="at">nrow =</span> <span class="dv">1</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>sigma2 <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>spat_domain<span class="sc">$</span>z  <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(nsites, <span class="at">mean =</span> X<span class="sc">%*%</span>beta <span class="sc">+</span> spat_domain<span class="sc">$</span>phi, <span class="at">sd =</span> <span class="fu">sqrt</span>(sigma2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Let’s generate some plots. First, the spatial random effects, then the observations.</p>
+<div class="cell" data-layout-align="center">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(spat_domain) <span class="sc">+</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="fu">aes</span>(x, y, <span class="at">fill=</span>phi)) <span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradientn</span>(<span class="at">colors =</span> <span class="fu">viridis</span>(<span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>() <span class="sc">+</span> </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(spat_domain) <span class="sc">+</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="fu">aes</span>(x, y, <span class="at">fill=</span>z)) <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradientn</span>(<span class="at">colors =</span> <span class="fu">viridis</span>(<span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>() <span class="sc">+</span> </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>So we’ve simulated some data from the CAR model and it seems fairly clear that the measurements are spatially correlated. Now we want to fit a CAR model to this data and estimate the parameters, <span class="math inline">\(\boldsymbol\theta = (\beta, \sigma^2, \tau^2, \rho)\)</span>.</p>
+<p>We can do this using MCMC. First, let’s summarize the hierarchical model.</p>
+<p><span class="math display">\[\begin{align*}
+Z_i &amp;\sim \text{N}\left(x^T_i\boldsymbol\beta + \phi_i, \; \sigma^2\right)\\
+\mu &amp;\sim \text{N}\left(0, \lambda^2\right)\\
+\phi_i|\phi_{j \in \mathcal{N}_i} &amp;\sim \text{N}\left(\frac{\rho}{m_i}\sum_{j\in \mathcal{N}_i} \phi_j, \frac{\tau^2}{m_i} \right)\\
+\sigma^2 &amp;\sim \text{IG}\left(a, b\right)\\
+\tau^2 &amp;\sim \text{IG}\left(a,b\right)\\
+\rho &amp;\sim \text{Unif}\left(0,1\right)
+\end{align*}\]</span></p>
+<p>We’ve stated the model using conditional distributions of <span class="math inline">\(\phi_i\)</span>, though we learned earlier that it is possible to write the joint distribution of <span class="math inline">\(\boldsymbol\phi\)</span>. If we do this, we will at some point to need invert a very large matrix in order to sample from the full conditional for <span class="math inline">\(\boldsymbol\phi\)</span>. Instead it might be faster to cycle through the full conditionals of <span class="math inline">\(\phi_i\)</span> for each <span class="math inline">\(i\)</span>.</p>
+<p>Most of this model can be implemented using Gibbs sampling, except when sampling the <span class="math inline">\(\rho\)</span> parameter. We’ll need to use a Metropolis-Hastings step for that. The full conditionals are as follows,</p>
+<p><span class="math display">\[\begin{align*}
+\boldsymbol\beta|\text{rest} &amp;\sim \text{N}\left(\mathbf{B}^{-1}\mathbf{A}, \mathbf{B}^{-1}\right)\\
+\mathbf{A} &amp;= \sigma^{-2} \mathbf{X}^T(Z - \boldsymbol\phi)\\
+\mathbf{B} &amp;= \sigma^{-2}\mathbf{X}^T\mathbf{X} + \lambda^{-2}\mathbf{I}\\
+\\\\
+\phi_i|\text{rest} &amp;\sim \text{N}\left(\frac{A}{B}, \frac{1}{B}\right)\\
+A &amp;= \frac{\rho}{\tau^2}\sum_{j \in \mathcal{N}_i}\phi_j + \frac{1}{\sigma^2}(Z_i - x_i^T\boldsymbol\beta)\\
+B &amp;= \frac{m_i}{\tau^2} + \frac{1}{\sigma^2}\\
+\\\\
+\sigma^2|\text{rest} &amp;\sim \text{IG}\left(A, B \right)\\
+A &amp;= a + \frac{n}{2}\\
+B &amp;= b + \frac{1}{2}(Z-\mathbf{X}\boldsymbol\beta-\phi)^T(Z-\mathbf{X}\boldsymbol\beta-\boldsymbol\phi)\\
+\\\\
+\tau^2|\text{rest} &amp;\sim \text{IG} \left(A, B\right)\\
+A &amp;= a + \frac{n}{2}\\
+B &amp;= b + \frac{1}{2}\sum_{i=1}^n m_i\left(\phi_i - \frac{\rho}{m_i}\sum_{j \in \mathcal{N}_i}\phi_j\right)^2\\
+\\\\
+p(\rho|\text{rest}) &amp;\propto \left[\prod_{i=1}^n p(\phi_i|\phi_{j, j\in\mathcal{N}_i}, \rho)\right]p(\rho)\\
+&amp;\propto \exp\left\{-\frac{1}{2\tau^2} \sum_{i=1}^n m_i \left(\phi_i - \frac{\rho}{m_i}\sum_{j \in \mathcal{N}_i} \phi_j \right)^2\right\} \mathbf{1}\left\{\rho \in [0,1]\right\}
+\end{align*}\]</span></p>
+<p>Clearly we are unable to sample directly from the full conditional for <span class="math inline">\(\rho\)</span>. Instead we will need to implement a Metropolis-Hasting step. We will use a truncated normal proposal distribution from the pacakge <code>extraDistr</code> to match the support of <span class="math inline">\(\rho\)</span>. This also let’s us “ignore” the indicator function in the uniform prior because we will never propose a candidate value outside of <span class="math inline">\([0,1]\)</span>.</p>
+<p>As an aside, we will need to routinely compute averages of neighboring spatial random effects at each location. Rather than extract neighbor information from a large neighbor matrix, we define <code>ineighbors</code> as a list of vectors containing the neighbor indices for each location. Additionally we create <code>nneighbors</code> as a vector containing the number of neighbors for each location. These two objects together should give us all we need to efficiently sample full conditionals.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>nsites <span class="ot">&lt;-</span> n<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>spat_domain <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span>n, <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>n)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>spat_domain<span class="sc">$</span>label <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>(n<span class="sc">*</span>n)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>spat_domain_g <span class="ot">&lt;-</span> <span class="fu">make_lattice</span>(<span class="fu">c</span>(n,n), <span class="at">mutual =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">as_adjacency_matrix</span>(spat_domain_g, <span class="at">sparse=</span><span class="dv">1</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>ineighbors <span class="ot">&lt;-</span> <span class="fu">apply</span>(W, <span class="at">MARGIN =</span> <span class="dv">1</span>, <span class="at">FUN =</span> <span class="cf">function</span>(x) <span class="fu">which</span>(x<span class="sc">==</span><span class="dv">1</span>))</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>nneighbors <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(W)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>First, simulate a small data set.</p>
+<p>Next sample the spatially independent and spatially dependent covariates.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># spatially independent</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># x1 &lt;- rnorm(nsites, mean = 0, sd = 1)</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="at">nrow =</span> nsites)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># spatial random effect</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>tau20 <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>rho0  <span class="ot">&lt;-</span> <span class="fl">0.99</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>M     <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">rowSums</span>(W))</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>spat_prec <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">/</span>tau20)<span class="sc">*</span>(M<span class="sc">-</span>rho0<span class="sc">*</span>W) <span class="co"># swap this with something else. . .</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>spat_domain<span class="sc">$</span>phi <span class="ot">&lt;-</span> <span class="fu">backsolve</span>(<span class="fu">chol</span>(spat_prec), <span class="fu">matrix</span>(<span class="fu">rnorm</span>(nsites), <span class="at">nrow =</span> nsites))</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>phi0 <span class="ot">&lt;-</span> spat_domain<span class="sc">$</span>phi</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Next sample the observations from the data distribution.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>beta0   <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>sigma20 <span class="ot">&lt;-</span> <span class="fl">0.25</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>spat_domain<span class="sc">$</span>z  <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(nsites, <span class="at">mean =</span> X<span class="sc">%*%</span>beta0 <span class="sc">+</span> spat_domain<span class="sc">$</span>phi, <span class="at">sd =</span> <span class="fu">sqrt</span>(sigma20))</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">matrix</span>(spat_domain<span class="sc">$</span>z, <span class="at">nrow =</span> nsites)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>npars  <span class="ot">&lt;-</span> <span class="fu">length</span>(beta)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>nsites <span class="ot">&lt;-</span> n<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>niters <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>burn   <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>keep_beta   <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow =</span> niters, <span class="at">ncol =</span> npars)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>keep_phi    <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow =</span> niters, <span class="at">ncol =</span> nsites)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>keep_sigma2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, niters)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>keep_tau2   <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, niters)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>keep_rho    <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, niters)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co"># initial values</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>beta   <span class="ot">&lt;-</span> keep_beta[<span class="dv">1</span>,]  <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="co">#beta0</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>phi    <span class="ot">&lt;-</span> keep_phi[<span class="dv">1</span>,]   <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">10</span>, nsites)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>sigma2 <span class="ot">&lt;-</span> keep_sigma2[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">2</span>   <span class="co">#sigma20</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>tau2   <span class="ot">&lt;-</span> keep_tau2[<span class="dv">1</span>]   <span class="ot">&lt;-</span> <span class="dv">5</span>  <span class="co"># tau20</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>rho    <span class="ot">&lt;-</span> keep_rho[<span class="dv">1</span>]    <span class="ot">&lt;-</span> rho0</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="co"># prior parameters</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>lambda2 <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Metropolis-Hastings</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>att <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>MH  <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a><span class="co"># pre-computes</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>XtX <span class="ot">&lt;-</span> <span class="fu">t</span>(X)<span class="sc">%*%</span>X</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a><span class="do">## </span><span class="al">TODO</span><span class="do">:</span></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a><span class="do">##    - review rho_loglike funtion.</span></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a><span class="co"># rho_loglike &lt;- function(rho, phi, ineighbors, nneighbors){</span></span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a><span class="co">#   sneighbors &lt;- sapply(ineighbors, FUN = function(x) sum(phi[x]))</span></span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a><span class="co">#   aneighbors &lt;- sneighbors/nneighbors</span></span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a><span class="co">#   </span></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a><span class="co">#   t1 &lt;- sum(nneighbors*phi^2)</span></span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a><span class="co">#   t2 &lt;- 2*rho*sum(phi*sneighbors)</span></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a><span class="co">#   t3 &lt;- (rho^2)*sum(nneighbors*(sneighbors^2))</span></span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a><span class="co">#   </span></span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a><span class="co">#   return(t1 - t2 + t3)</span></span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a><span class="co"># }</span></span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a><span class="fu">tic</span>()</span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(iter <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>niters){</span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sample mu [Gibbs]</span></span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a>  A     <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">/</span>sigma2)<span class="sc">*</span>(<span class="fu">t</span>(X)<span class="sc">%*%</span>(z<span class="sc">-</span>phi))</span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a>  B_inv <span class="ot">&lt;-</span> <span class="fu">solve</span>((<span class="dv">1</span><span class="sc">/</span>sigma2)<span class="sc">*</span>XtX <span class="sc">+</span> (<span class="dv">1</span><span class="sc">/</span>lambda2)<span class="sc">*</span><span class="fu">diag</span>(npars))</span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a>  beta  <span class="ot">&lt;-</span> B_inv<span class="sc">%*%</span>A<span class="sc">+</span><span class="fu">t</span>(<span class="fu">chol</span>(B_inv))<span class="sc">%*%</span><span class="fu">rnorm</span>(npars)</span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a>  <span class="co"># beta &lt;- beta0</span></span>
+<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sample phi [Gibbs]</span></span>
+<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (site <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nsites){</span>
+<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a>    A         <span class="ot">&lt;-</span> (rho<span class="sc">/</span>tau2)<span class="sc">*</span><span class="fu">sum</span>(phi[ineighbors[[site]]]) <span class="sc">+</span> </span>
+<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a>                 (<span class="dv">1</span><span class="sc">/</span>sigma2)<span class="sc">*</span>(z[site] <span class="sc">-</span> X[site,]<span class="sc">%*%</span>beta)</span>
+<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a>    B_inv     <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>(nneighbors[site]<span class="sc">/</span>tau2 <span class="sc">+</span> <span class="dv">1</span><span class="sc">/</span>sigma2) </span>
+<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a>    phi[site] <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="at">mean =</span> B_inv<span class="sc">*</span>A, <span class="at">sd =</span> <span class="fu">sqrt</span>(B_inv))</span>
+<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a>  <span class="co"># phi &lt;- phi0</span></span>
+<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sample sigma2 [Gibbs]</span></span>
+<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a>  A      <span class="ot">&lt;-</span> a <span class="sc">+</span> (nsites<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a>  B      <span class="ot">&lt;-</span> b <span class="sc">+</span> (<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>)<span class="sc">*</span><span class="fu">sum</span>((z <span class="sc">-</span> X<span class="sc">%*%</span>beta <span class="sc">-</span> phi)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a>  sigma2 <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="fu">rgamma</span>(<span class="dv">1</span>, A, B)</span>
+<span id="cb15-69"><a href="#cb15-69" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sigma2 &lt;- sigma20</span></span>
+<span id="cb15-70"><a href="#cb15-70" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-71"><a href="#cb15-71" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sample tau2 [Gibbs]</span></span>
+<span id="cb15-72"><a href="#cb15-72" aria-hidden="true" tabindex="-1"></a>  aneighbors <span class="ot">&lt;-</span> <span class="fu">sapply</span>(ineighbors, <span class="at">FUN =</span> <span class="cf">function</span>(x) <span class="fu">sum</span>(phi[x]))<span class="sc">/</span>nneighbors</span>
+<span id="cb15-73"><a href="#cb15-73" aria-hidden="true" tabindex="-1"></a>  A    <span class="ot">&lt;-</span> a <span class="sc">+</span> (nsites<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb15-74"><a href="#cb15-74" aria-hidden="true" tabindex="-1"></a>  B    <span class="ot">&lt;-</span> b <span class="sc">+</span> (<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>)<span class="sc">*</span><span class="fu">sum</span>(nneighbors<span class="sc">*</span>(phi <span class="sc">-</span> rho<span class="sc">*</span>aneighbors)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb15-75"><a href="#cb15-75" aria-hidden="true" tabindex="-1"></a>  tau2 <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="fu">rgamma</span>(<span class="dv">1</span>, A, B)</span>
+<span id="cb15-76"><a href="#cb15-76" aria-hidden="true" tabindex="-1"></a>  <span class="co"># tau2 &lt;- tau20</span></span>
+<span id="cb15-77"><a href="#cb15-77" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-78"><a href="#cb15-78" aria-hidden="true" tabindex="-1"></a>  <span class="do">## </span><span class="al">TODO</span><span class="do">:</span></span>
+<span id="cb15-79"><a href="#cb15-79" aria-hidden="true" tabindex="-1"></a>  <span class="do">##    - review rho M-H step. Fix rho for now.</span></span>
+<span id="cb15-80"><a href="#cb15-80" aria-hidden="true" tabindex="-1"></a>  <span class="do">## sample rho [M-H]</span></span>
+<span id="cb15-81"><a href="#cb15-81" aria-hidden="true" tabindex="-1"></a>  <span class="co"># att &lt;- att + 1 </span></span>
+<span id="cb15-82"><a href="#cb15-82" aria-hidden="true" tabindex="-1"></a>  <span class="co"># can &lt;- rtnorm(1, rho, MH, a = 0, b = 1)</span></span>
+<span id="cb15-83"><a href="#cb15-83" aria-hidden="true" tabindex="-1"></a>  <span class="co"># R   &lt;- rho_loglike(can, phi, ineighbors, nneighbors) - # Likelihood</span></span>
+<span id="cb15-84"><a href="#cb15-84" aria-hidden="true" tabindex="-1"></a>  <span class="co">#        rho_loglike(rho, phi, ineighbors, nneighbors) +</span></span>
+<span id="cb15-85"><a href="#cb15-85" aria-hidden="true" tabindex="-1"></a>  <span class="co">#        dtnorm(rho, can , a = 0, b = 1, log = T) -      # M-H adjustment</span></span>
+<span id="cb15-86"><a href="#cb15-86" aria-hidden="true" tabindex="-1"></a>  <span class="co">#        dtnorm(can, rho , a = 0, b = 1, log = T)</span></span>
+<span id="cb15-87"><a href="#cb15-87" aria-hidden="true" tabindex="-1"></a>  <span class="co"># if(log(runif(1)) &lt; R){</span></span>
+<span id="cb15-88"><a href="#cb15-88" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   acc &lt;- acc + 1</span></span>
+<span id="cb15-89"><a href="#cb15-89" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   rho &lt;- can</span></span>
+<span id="cb15-90"><a href="#cb15-90" aria-hidden="true" tabindex="-1"></a>  <span class="co"># }</span></span>
+<span id="cb15-91"><a href="#cb15-91" aria-hidden="true" tabindex="-1"></a>  <span class="co"># rho &lt;- rho0</span></span>
+<span id="cb15-92"><a href="#cb15-92" aria-hidden="true" tabindex="-1"></a>  <span class="co"># </span></span>
+<span id="cb15-93"><a href="#cb15-93" aria-hidden="true" tabindex="-1"></a>  <span class="co"># # tuning</span></span>
+<span id="cb15-94"><a href="#cb15-94" aria-hidden="true" tabindex="-1"></a>  <span class="co"># if(iter &lt; burn){</span></span>
+<span id="cb15-95"><a href="#cb15-95" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   if(att &gt; 50){</span></span>
+<span id="cb15-96"><a href="#cb15-96" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     if(acc/att &lt; 0.3){MH &lt;- MH*0.8}</span></span>
+<span id="cb15-97"><a href="#cb15-97" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     if(acc/att &gt; 0.6){MH &lt;- MH*1.2}</span></span>
+<span id="cb15-98"><a href="#cb15-98" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     acc &lt;- att &lt;- 0</span></span>
+<span id="cb15-99"><a href="#cb15-99" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   }</span></span>
+<span id="cb15-100"><a href="#cb15-100" aria-hidden="true" tabindex="-1"></a>  <span class="co"># }</span></span>
+<span id="cb15-101"><a href="#cb15-101" aria-hidden="true" tabindex="-1"></a>  rho <span class="ot">&lt;-</span> rho0</span>
+<span id="cb15-102"><a href="#cb15-102" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-103"><a href="#cb15-103" aria-hidden="true" tabindex="-1"></a>  <span class="co"># storage</span></span>
+<span id="cb15-104"><a href="#cb15-104" aria-hidden="true" tabindex="-1"></a>  keep_beta[iter,]  <span class="ot">&lt;-</span> beta</span>
+<span id="cb15-105"><a href="#cb15-105" aria-hidden="true" tabindex="-1"></a>  keep_phi[iter,]   <span class="ot">&lt;-</span> phi</span>
+<span id="cb15-106"><a href="#cb15-106" aria-hidden="true" tabindex="-1"></a>  keep_sigma2[iter] <span class="ot">&lt;-</span> sigma2</span>
+<span id="cb15-107"><a href="#cb15-107" aria-hidden="true" tabindex="-1"></a>  keep_tau2[iter]   <span class="ot">&lt;-</span> tau2</span>
+<span id="cb15-108"><a href="#cb15-108" aria-hidden="true" tabindex="-1"></a>  keep_rho[iter]    <span class="ot">&lt;-</span> rho</span>
+<span id="cb15-109"><a href="#cb15-109" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-110"><a href="#cb15-110" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-111"><a href="#cb15-111" aria-hidden="true" tabindex="-1"></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>4.44 sec elapsed</code></pre>
+</div>
+</div>
+<p>Now let’s inspect some trace plots.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>win <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span>niters</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(win, keep_beta[win,<span class="dv">1</span>], <span class="at">type =</span> <span class="st">"l"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> beta0[<span class="dv">1</span>], <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(win, keep_sigma2[win], <span class="at">type =</span> <span class="st">"l"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> sigma20, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-15-2.png" class="img-fluid" width="672"></p>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(win, keep_tau2[win], <span class="at">type =</span> <span class="st">"l"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> tau20, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-15-3.png" class="img-fluid" width="672"></p>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(win, keep_rho[win], <span class="at">type =</span> <span class="st">"l"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> rho0, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-15-4.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Check trace plots for <span class="math inline">\(\phi\)</span>. 10 random locations.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>sampled_sites <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>nsites, <span class="at">size =</span> <span class="dv">10</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (site <span class="cf">in</span> sampled_sites){</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(win, keep_phi[win, site] <span class="sc">+</span> keep_beta[win,<span class="dv">1</span>], <span class="at">type =</span> <span class="st">"l"</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">h =</span> phi0[site], <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-16-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-16-3.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-16-4.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-16-5.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-16-6.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-16-7.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-16-8.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-16-9.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-16-10.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>There’s clearly something wrong. I’ll need to revisit this and verify the derivations and/or debug the code.</p>
+<p>What if we compared to the CARBayes package? Note that CARBayes uses a modified version of the model proposed by Leroux (cite)</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert neighbord matrix from sparse dgCMatrix format.</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(W)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># fit model from CARBayes.</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>cb.model <span class="ot">&lt;-</span> <span class="fu">S.CARleroux</span>(z<span class="sc">~</span><span class="dv">1</span>, <span class="at">family =</span> <span class="st">"gaussian"</span>, </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                        <span class="at">W=</span>W, <span class="at">burnin =</span> <span class="dv">1000</span>, <span class="at">n.sample =</span> <span class="dv">5000</span>, </span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">rho =</span> rho0, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>cb.model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+#################
+#### Model fitted
+#################
+Likelihood model - Gaussian (identity link function) 
+Random effects model - Leroux CAR
+Regression equation - z ~ 1
+Number of missing observations - 0
+
+############
+#### Results
+############
+Posterior quantities and DIC
+
+              Mean   2.5%  97.5% n.effective Geweke.diag
+(Intercept) 2.2193 2.0914 2.3335      3099.0         1.6
+nu2         0.2861 0.0041 1.2120        24.8        -3.4
+tau2        3.9512 1.1453 6.1475        28.6         3.6
+rho         0.9900 0.9900 0.9900          NA          NA
+
+DIC =  27.62219       p.d =  -24.97909       LMPL =  -119.43 </code></pre>
+</div>
+</div>
+<p>Let’s look at the CARbayes samples…</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cb.model<span class="sc">$</span>samples<span class="sc">$</span>beta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cb.model<span class="sc">$</span>samples<span class="sc">$</span>nu2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-18-2.png" class="img-fluid" width="672"></p>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cb.model<span class="sc">$</span>samples<span class="sc">$</span>tau2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-18-3.png" class="img-fluid" width="672"></p>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(cb.model$samples$phi)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
