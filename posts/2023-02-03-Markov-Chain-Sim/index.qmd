@@ -1,6 +1,7 @@
 ---
 title: "ST746 - Markov Chain Sim"
 description: ""
+date: "2/3/2023"
 author:
   - name: Matthew Shisler
     affiliation: North Carloina State University - Department of Statistics
