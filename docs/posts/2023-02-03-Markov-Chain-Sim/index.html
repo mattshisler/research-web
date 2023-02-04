@@ -203,7 +203,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/load-packages_b02ac35d850dd033b8940ef536754e54">
 <details>
 <summary>Code: Load the packages</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -226,7 +226,7 @@ S = \{A,B,C\}
 <p>Let <span class="math inline">\(X_n\)</span> be the state of the chain at time <span class="math inline">\(n\)</span>. Starting with <span class="math inline">\(X_0 = A\)</span>, we will simulate the chain out to <span class="math inline">\(X_6\)</span>.</p>
 <p>Let <span class="math inline">\(N_B\)</span> be the number of visits to state <span class="math inline">\(B\)</span> and <span class="math inline">\(N_C\)</span> be the number of visits to state <span class="math inline">\(C\)</span>. We would like to approximate the probability of visiting states <span class="math inline">\(B\)</span> and <span class="math inline">\(C\)</span> an equal number of times in the first six steps.</p>
 <p>With a little work, we can show that it is not possible for <span class="math inline">\(N_B = N_C = 0, 1\)</span>. Also, <span class="math inline">\(P(N_B = 3, N_B = 3 | X_0 = A) = P(X_1 \neq A, \dots, X_6 \neq A| X_0 = A)\)</span>. The tricky calculation is <span class="math inline">\(P(N_B = 2, N_B = 2 | X_0 = A)\)</span> and that is the motivation for this small simulation.</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-2_ce7bbcfc03ecdf56afaed4552b8d903b">
 <details>
 <summary>Code: define the simulation function</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>mc.sim <span class="ot">&lt;-</span> <span class="cf">function</span>(P, <span class="at">init.state =</span> <span class="dv">1</span>, <span class="at">num.iters =</span> <span class="dv">50</span>){</span>
@@ -248,7 +248,7 @@ S = \{A,B,C\}
 </details>
 </div>
 <p>Test the simulation. We should not see any runs of 2 since there is no probability to stay in the same state. We should not see the first state being 1, since we know we must immediately leave state <span class="math inline">\(A\)</span>.</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-3_d82592557dd0ef95f92c48976237c93a">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>,</span>
@@ -262,7 +262,7 @@ S = \{A,B,C\}
 </div>
 </div>
 <p>This looks good. We want to run this simulation many times for the first six steps of the chain.</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-4_1ceb20cb9b4541ae34e9bc93fba90590">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>num.reps <span class="ot">&lt;-</span> <span class="dv">10</span></span>
@@ -276,27 +276,27 @@ S = \{A,B,C\}
 </details>
 </div>
 <p>Here are the results for 10 replicates:</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-5_62cf3db01353d5b753b2166b15b1f077">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>      [,1] [,2] [,3] [,4] [,5] [,6]
- [1,]    2    1    2    3    1    3
- [2,]    2    3    1    2    1    3
- [3,]    3    1    2    1    3    1
- [4,]    3    1    2    1    2    1
- [5,]    3    1    2    1    3    1
- [6,]    3    1    3    1    2    1
- [7,]    2    1    2    1    3    2
- [8,]    3    1    3    1    3    1
- [9,]    2    3    1    3    1    2
-[10,]    3    1    2    1    2    1</code></pre>
+ [1,]    2    1    2    1    2    1
+ [2,]    3    1    2    1    3    1
+ [3,]    2    1    3    1    3    1
+ [4,]    2    3    1    2    1    2
+ [5,]    3    1    3    1    2    1
+ [6,]    3    1    2    1    2    3
+ [7,]    2    1    2    1    3    1
+ [8,]    2    1    2    3    1    2
+ [9,]    3    1    3    1    3    1
+[10,]    2    1    3    2    1    2</code></pre>
 </div>
 </div>
 <p>Next, we want to count each time a row has an equal number of <span class="math inline">\(2\)</span>s and <span class="math inline">\(3\)</span>s corresponding to the number of times we visit states <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> an equal number of times.</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-6_a483d3815fc721cf17ab98460f648a55">
 <details>
 <summary>Code: a function to check for equal visits</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>check.equal.visit <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">num.times =</span> <span class="dv">2</span>){</span>
@@ -312,24 +312,24 @@ S = \{A,B,C\}
 </div>
 </div>
 <p>Apply this function to the rows of the results matrix.</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-7_52f7141258948fde9fccc3aaa595626d">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>equal2 <span class="ot">&lt;-</span> <span class="fu">apply</span>(results, <span class="at">MARGIN =</span> <span class="dv">1</span>, <span class="cf">function</span>(x) <span class="fu">check.equal.visit</span>(x, <span class="at">num.times =</span> <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Sum this vector to get the number of times the equal visits occured, the dived by the number of simulation replicates to estimate the probability of an equal number of visits.</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-8_754b2d08fdfe553c081369da008a1a0f">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(equal2)<span class="sc">/</span>num.reps</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.3</code></pre>
+<pre><code>[1] 0.1</code></pre>
 </div>
 </div>
 <p>Repeat the above, but for a large number of replicates.</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-9_a1d7fa7351df2c78701efce3157ac47f">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>num.reps <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
@@ -363,19 +363,19 @@ S = \{A,B,C\}
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(equal2)<span class="sc">/</span>num.reps</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.2836</code></pre>
+<pre><code>[1] 0.2737</code></pre>
 </div>
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(equal3)<span class="sc">/</span>num.reps</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.0011</code></pre>
+<pre><code>[1] 0.001</code></pre>
 </div>
 </div>
 <p>This agrees with our estimates, but this is not best way to run the simulation because I don’t need to store the results of each run every time. Let’s write something a little more compact.</p>
 <p>Each time I simulate a replicate I will immediately check for equal visits. Then I can throw away the old results instead of storing them.</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-10_46f30fe7daf69d3bff4467d2c97e4940">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>num.reps <span class="ot">&lt;-</span> <span class="dv">1000000</span></span>
