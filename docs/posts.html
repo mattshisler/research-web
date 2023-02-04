@@ -70,9 +70,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-title','listing-author','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
       
-      searchColumns: ["listing-title","listing-author","listing-description","listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -156,309 +156,152 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-categories="Research,Bayesian,MCMC" data-listing-file-modified-sort="1675394189346" data-listing-reading-time-sort="2.955">
-<a href="./posts/2023-02-02-Step-0-Linear-Regression-Gibbs-Sampling/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Step 0 - Bayesian Linear Regression with Gibbs Sampling
-</h5>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('Research'); return false;">
-Research
+<div class="quarto-listing quarto-listing-container-table" id="listing-listing">
+<div class="listing-actions-group">
+   <div class="input-group input-group-sm quarto-listing-sort">
+     <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
+     <select id="listing-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
+       <option value="" disabled="" selected="" hidden="">Order By</option>
+       <option value="index" data-direction="asc">Default</option>
+         <option value="listing-date-sort" data-direction="asc">
+          Date - Oldest
+        </option>
+         <option value="listing-date-sort" data-direction="desc">
+          Date - Newest
+        </option>
+         <option value="listing-title-sort" data-direction="asc">
+          Title
+        </option>
+         <option value="listing-author" data-direction="asc">
+          Author
+        </option>
+     </select>
+  </div>
+    <div class="input-group input-group-sm quarto-listing-filter">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input type="text" class="search form-control" placeholder="Filter">
+    </div>
 </div>
-<div class="listing-category" onclick="window.quartoListingCategory('Bayesian'); return false;">
-Bayesian
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('MCMC'); return false;">
-MCMC
-</div>
-</div>
-<div class="card-text listing-description">
-Starting from the basics. . .
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
+
+<table class="quarto-listing-table table">
+<thead>
+<tr>
+<th>
+<a class="sort" data-sort="listing-date-sort" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Date</a>
+</th>
+<th>
+<a class="sort" data-sort="listing-title-sort" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Title</a>
+</th>
+<th>
+<a class="sort" data-sort="listing-author" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Author</a>
+</th>
+</tr>
+</thead>
+<tbody class="list">
+<tr data-index="0" data-categories="Research,Bayesian,MCMC" data-listing-file-modified-sort="1675394189346" data-listing-reading-time-sort="2.955" data-listing-title-sort="Step 0 - Bayesian Linear Regression with Gibbs Sampling" data-listing-filename-sort="index.qmd">
+<td class="listing-date">
+</td>
+<td class="listing-title">
+<a href="./posts/2023-02-02-Step-0-Linear-Regression-Gibbs-Sampling/index.html" class="title">Step 0 - Bayesian Linear Regression with Gibbs Sampling</a>
+</td>
+<td class="listing-author">
 Matthew Shisler
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="1" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675395207637" data-listing-reading-time-sort="4.205">
-<a href="./posts/2023-02-02-Step-1-Hierarchical-Linear-Regression/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Step 1 - Bayesian Hierarchical Linear Regression
-</h5>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('Bayesian'); return false;">
-Bayesian
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('MCMC'); return false;">
-MCMC
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('Hierarchical Model'); return false;">
-Hierarchical Model
-</div>
-</div>
-<div class="card-text listing-description">
-Adding another level to the linear model.
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
+</td>
+</tr>
+<tr data-index="1" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675395207637" data-listing-reading-time-sort="4.205" data-listing-title-sort="Step 1 - Bayesian Hierarchical Linear Regression" data-listing-filename-sort="index.qmd">
+<td class="listing-date">
+</td>
+<td class="listing-title">
+<a href="./posts/2023-02-02-Step-1-Hierarchical-Linear-Regression/index.html" class="title">Step 1 - Bayesian Hierarchical Linear Regression</a>
+</td>
+<td class="listing-author">
 Matthew Shisler
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="2" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675396253951" data-listing-reading-time-sort="4.59">
-<a href="./posts/2023-02-02-Step-2-Single Parent Design Matrix/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Step 2 - One Parent Design Matrix
-</h5>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('Bayesian'); return false;">
-Bayesian
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('MCMC'); return false;">
-MCMC
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('Hierarchical Model'); return false;">
-Hierarchical Model
-</div>
-</div>
-<div class="card-text listing-description">
-Here we extend to the situation of one parent design matrix from which rows are drawn to construct design matrices for each response vector.
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
+</td>
+</tr>
+<tr data-index="2" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675396253951" data-listing-reading-time-sort="4.59" data-listing-title-sort="Step 2 - One Parent Design Matrix" data-listing-filename-sort="index.qmd">
+<td class="listing-date">
+</td>
+<td class="listing-title">
+<a href="./posts/2023-02-02-Step-2-Single Parent Design Matrix/index.html" class="title">Step 2 - One Parent Design Matrix</a>
+</td>
+<td class="listing-author">
 Matthew Shisler
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="3" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675396863941" data-listing-reading-time-sort="6.435">
-<a href="./posts/2023-02-02-Step-3-Add-a-2nd-Level-Linear-Trend/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Step 3 - Add a Second Level Linear Trend
-</h5>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('Bayesian'); return false;">
-Bayesian
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('MCMC'); return false;">
-MCMC
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('Hierarchical Model'); return false;">
-Hierarchical Model
-</div>
-</div>
-<div class="card-text listing-description">
-In this extension we add a linear trend to the second level of the hierarchical model and re-derive the full conditionals.
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
+</td>
+</tr>
+<tr data-index="3" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675396863941" data-listing-reading-time-sort="6.435" data-listing-title-sort="Step 3 - Add a Second Level Linear Trend" data-listing-filename-sort="index.qmd">
+<td class="listing-date">
+</td>
+<td class="listing-title">
+<a href="./posts/2023-02-02-Step-3-Add-a-2nd-Level-Linear-Trend/index.html" class="title">Step 3 - Add a Second Level Linear Trend</a>
+</td>
+<td class="listing-author">
 Matthew Shisler
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="4" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675401904201" data-listing-reading-time-sort="8.36">
-<a href="./posts/2023-02-02-Step-4-Application-to-the-Linearized-Double-Logistic-Function/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Step 4 - Application to the Linearized Double-Logistic Function
-</h5>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('Bayesian'); return false;">
-Bayesian
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('MCMC'); return false;">
-MCMC
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('Hierarchical Model'); return false;">
-Hierarchical Model
-</div>
-</div>
-<div class="card-text listing-description">
-All previous steps have been building to the application of Gibbs sampling for the double-logistic function.
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
+</td>
+</tr>
+<tr data-index="4" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675401904201" data-listing-reading-time-sort="8.36" data-listing-title-sort="Step 4 - Application to the Linearized Double-Logistic Function" data-listing-filename-sort="index.qmd">
+<td class="listing-date">
+</td>
+<td class="listing-title">
+<a href="./posts/2023-02-02-Step-4-Application-to-the-Linearized-Double-Logistic-Function/index.html" class="title">Step 4 - Application to the Linearized Double-Logistic Function</a>
+</td>
+<td class="listing-author">
 Matthew Shisler
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="5" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675401635928" data-listing-reading-time-sort="9.83">
-<a href="./posts/2023-02-02-Step-5-Verify-Convergence/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Step 5 - Verify Convergence
-</h5>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('Bayesian'); return false;">
-Bayesian
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('MCMC'); return false;">
-MCMC
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('Hierarchical Model'); return false;">
-Hierarchical Model
-</div>
-</div>
-<div class="card-text listing-description">
-Here we initialize the sampler with different values and check if the chains converge to the same stationary distribution.
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
+</td>
+</tr>
+<tr data-index="5" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675401635928" data-listing-reading-time-sort="9.83" data-listing-title-sort="Step 5 - Verify Convergence" data-listing-filename-sort="index.qmd">
+<td class="listing-date">
+</td>
+<td class="listing-title">
+<a href="./posts/2023-02-02-Step-5-Verify-Convergence/index.html" class="title">Step 5 - Verify Convergence</a>
+</td>
+<td class="listing-author">
 Matthew Shisler
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="6" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675402021866" data-listing-reading-time-sort="0.04">
-<a href="./posts/2023-02-02-Step-6-Application to the Double-Logistic Function/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Step 6 - Application to the (orignal) Double-logistic function
-</h5>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('Bayesian'); return false;">
-Bayesian
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('MCMC'); return false;">
-MCMC
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('Hierarchical Model'); return false;">
-Hierarchical Model
-</div>
-</div>
-<div class="card-text listing-description">
-TODO:
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
+</td>
+</tr>
+<tr data-index="6" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675402021866" data-listing-reading-time-sort="0.04" data-listing-title-sort="Step 6 - Application to the (orignal) Double-logistic function" data-listing-filename-sort="index.qmd">
+<td class="listing-date">
+</td>
+<td class="listing-title">
+<a href="./posts/2023-02-02-Step-6-Application to the Double-Logistic Function/index.html" class="title">Step 6 - Application to the (orignal) Double-logistic function</a>
+</td>
+<td class="listing-author">
 Matthew Shisler
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="7" data-categories="Bayesian,MCMC,Spatial,CAR" data-listing-file-modified-sort="1675405191267" data-listing-reading-time-sort="12.46">
-<a href="./posts/2023-02-02-Step-7-Bayesian spatial CAR model/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Step 7 - Areal data and the spatial CAR model - Basic Example
-</h5>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('Bayesian'); return false;">
-Bayesian
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('MCMC'); return false;">
-MCMC
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('Spatial'); return false;">
-Spatial
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('CAR'); return false;">
-CAR
-</div>
-</div>
-<div class="card-text listing-description">
-A basic description and example of the spatial conditionally autoregressive model for areal data.
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
+</td>
+</tr>
+<tr data-index="7" data-categories="Bayesian,MCMC,Spatial,CAR" data-listing-file-modified-sort="1675405191267" data-listing-reading-time-sort="12.46" data-listing-title-sort="Step 7 - Areal data and the spatial CAR model - Basic Example" data-listing-filename-sort="index.qmd">
+<td class="listing-date">
+</td>
+<td class="listing-title">
+<a href="./posts/2023-02-02-Step-7-Bayesian spatial CAR model/index.html" class="title">Step 7 - Areal data and the spatial CAR model - Basic Example</a>
+</td>
+<td class="listing-author">
 Matthew Shisler
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="8" data-categories="Bayesian,MCMC,Spatial,CAR" data-listing-file-modified-sort="1675409418178" data-listing-reading-time-sort="3.91">
-<a href="./posts/2023-02-02-Step-8-Simulating-Multivariate-Areal-Data/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Step 8 - Simulating Multivariate Areal Data
-</h5>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('Bayesian'); return false;">
-Bayesian
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('MCMC'); return false;">
-MCMC
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('Spatial'); return false;">
-Spatial
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('CAR'); return false;">
-CAR
-</div>
-</div>
-<div class="card-text listing-description">
-We show how to simulate multivariate areal data with spatial dependence using the CAR model.
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
+</td>
+</tr>
+<tr data-index="8" data-categories="Bayesian,MCMC,Spatial,CAR" data-listing-file-modified-sort="1675409418178" data-listing-reading-time-sort="3.91" data-listing-title-sort="Step 8 - Simulating Multivariate Areal Data" data-listing-filename-sort="index.qmd">
+<td class="listing-date">
+</td>
+<td class="listing-title">
+<a href="./posts/2023-02-02-Step-8-Simulating-Multivariate-Areal-Data/index.html" class="title">Step 8 - Simulating Multivariate Areal Data</a>
+</td>
+<td class="listing-author">
 Matthew Shisler
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="9" data-categories="Stochastic Processes" data-listing-file-modified-sort="1675539175881" data-listing-reading-time-sort="5.22">
-<a href="./posts/2023-02-03-Markov-Chain-Sim/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-ST746 - Markov Chain Sim
-</h5>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('Stochastic Processes'); return false;">
-Stochastic Processes
-</div>
-</div>
-<div class="card-text listing-description">
-We want to simulate a simple Markov Chain. The state space is
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
+</td>
+</tr>
+<tr data-index="9" data-categories="Stochastic Processes" data-listing-date-sort="1675400400000" data-listing-file-modified-sort="1675539958358" data-listing-reading-time-sort="5.22" data-listing-title-sort="ST746 - Markov Chain Sim" data-listing-filename-sort="index.qmd">
+<td class="listing-date">
+Feb 3, 2023
+</td>
+<td class="listing-title">
+<a href="./posts/2023-02-03-Markov-Chain-Sim/index.html" class="title">ST746 - Markov Chain Sim</a>
+</td>
+<td class="listing-author">
 Matthew Shisler
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-</div>
+</td>
+</tr>
+</tbody>
+
+</table>
 <div class="listing-no-matching d-none">
 No matching items
 </div>
