@@ -153,6 +153,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <a class="nav-link" href="../../research.html">
  <span class="menu-text">Research</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../learn.html">
+ <span class="menu-text">Learn</span></a>
+  </li>  
 </ul>
               <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
@@ -219,7 +223,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/load-packages_3b26ab499e022fcada5e84a85e87f650">
 <details>
 <summary>Code: Load the packages</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -251,7 +255,7 @@ w_{ij} =
 \end{cases}
 \]</span> By convention we say that an areal unit does not share a border with itself hence <span class="math inline">\(w_{ii} = 0\)</span> for all <span class="math inline">\(i = 1, \dots, n\)</span>.</p>
 <p>Let’s define our own spatial domain and partition it into some very basic units.</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-2_62fa3341425aabf3169ee0f3e6ba8a6e">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">4</span></span>
@@ -260,7 +264,7 @@ w_{ij} =
 </details>
 </div>
 <p>Here is the spatial domain. It is a regular lattice with 16 areal units.</p>
-<div class="cell" data-layout-align="center">
+<div class="cell" data-layout-align="center" data-hash="index_cache/html/fig-lattice-example_3cbca499ce6bd6444f0a192d1b8477ab">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(spat_domain) <span class="sc">+</span></span>
@@ -279,7 +283,7 @@ w_{ij} =
 </div>
 </div>
 <p>Next we want to define a neighborhood matrix for this regular lattice. A small digression, the convention used to label the areal units will impact the structure of this matrix. Is there a “best” structure? That remains to be seen. For now, let’s stick with the adjacency matrix that arises from the ordering in figure above. Adjacency matrices are abundant in graph theory. We’ll use the package <code>igraph</code> to construct the adjacency matrix for the areal units above. This is accomplished by first using <code>igraph</code> to create a 4 <span class="math inline">\(\times\)</span> 4 lattice graph, then using the <code>as_adjacency_matrix</code> function to convert the graph object to a sparse matrix.</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/fig-adjacent_mat_c1c0fe54a7618e05d67ce6a9247ab7a2">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>spat_domain_g <span class="ot">&lt;-</span> <span class="fu">make_lattice</span>(<span class="fu">c</span>(n,n), <span class="at">mutual =</span> <span class="cn">TRUE</span>)</span>
@@ -308,7 +312,7 @@ w_{ij} =
 </div>
 </div>
 <p>With the spatial domain defined and partitioned, we can continue by simulating spatial data. The most basic case assumes spatial independence.Let’s also make it a bit more interesting by bumping up the number of areal units. Now it will probably be a lot easier to spot spatial dependence by a plot of the data alone.</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-5_5066a2d9c55f958049a87df2f17a242b">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">70</span></span>
@@ -344,7 +348,7 @@ Z_i =  \mathbf{x}^T_i\beta + \phi_i + \varepsilon_i
 \boldsymbol\phi \sim \text{N}\left(\boldsymbol{0}, \tau^2(\mathbf{M} - \rho \mathbf{W})^{-1}\right)
 \]</span> The matrix <span class="math inline">\(\mathbf{M}\)</span> is fairly easy to obtain. Its diagonal is just the row sums from <span class="math inline">\(\mathbf{W}\)</span> and all other terms set to 0.</p>
 <p>Let’s try to simulate some data from this model. First we’ll define the spatial domain.</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-6_a0490a6421d03fc58190745acccd5141">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>n      <span class="ot">&lt;-</span> <span class="dv">70</span></span>
@@ -356,7 +360,7 @@ Z_i =  \mathbf{x}^T_i\beta + \phi_i + \varepsilon_i
 </details>
 </div>
 <p>Next define some parameters and draw from the spatial random effects distribution.</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-7_872e61c64ea02fafae189cced5da6db9">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>tau2 <span class="ot">&lt;-</span> <span class="dv">5</span></span>
@@ -370,7 +374,7 @@ Z_i =  \mathbf{x}^T_i\beta + \phi_i + \varepsilon_i
 </details>
 </div>
 <p>Next sample the observations from the data distribution.</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-8_16f612487c474e21ebecd343d53aa48a">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>X    <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, nsites)</span>
@@ -380,7 +384,7 @@ Z_i =  \mathbf{x}^T_i\beta + \phi_i + \varepsilon_i
 </details>
 </div>
 <p>Let’s generate some plots. First, the spatial random effects, then the observations.</p>
-<div class="cell" data-layout-align="center">
+<div class="cell" data-layout-align="center" data-hash="index_cache/html/unnamed-chunk-9_371ab3ad7d62c1eef8f8aa2f7fb0ee4b">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(spat_domain) <span class="sc">+</span></span>
@@ -398,7 +402,7 @@ Z_i =  \mathbf{x}^T_i\beta + \phi_i + \varepsilon_i
 </div>
 </div>
 </div>
-<div class="cell" data-layout-align="center">
+<div class="cell" data-layout-align="center" data-hash="index_cache/html/unnamed-chunk-10_b8ed158b1bf39af12ad27c38a97c08f1">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(spat_domain) <span class="sc">+</span></span>
@@ -450,7 +454,7 @@ p(\rho|\text{rest}) &amp;\propto \left[\prod_{i=1}^n p(\phi_i|\phi_{j, j\in\math
 \end{align*}\]</span></p>
 <p>Clearly we are unable to sample directly from the full conditional for <span class="math inline">\(\rho\)</span>. Instead we will need to implement a Metropolis-Hasting step. We will use a truncated normal proposal distribution from the pacakge <code>extraDistr</code> to match the support of <span class="math inline">\(\rho\)</span>. This also let’s us “ignore” the indicator function in the uniform prior because we will never propose a candidate value outside of <span class="math inline">\([0,1]\)</span>.</p>
 <p>As an aside, we will need to routinely compute averages of neighboring spatial random effects at each location. Rather than extract neighbor information from a large neighbor matrix, we define <code>ineighbors</code> as a list of vectors containing the neighbor indices for each location. Additionally we create <code>nneighbors</code> as a vector containing the number of neighbors for each location. These two objects together should give us all we need to efficiently sample full conditionals.</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-11_4fc7aa0caad1758e7839d74c22d999a9">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
@@ -465,7 +469,7 @@ p(\rho|\text{rest}) &amp;\propto \left[\prod_{i=1}^n p(\phi_i|\phi_{j, j\in\math
 </div>
 <p>First, simulate a small data set.</p>
 <p>Next sample the spatially independent and spatially dependent covariates.</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-12_f3cc3323b8d731c5350539bc4dfd2131">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># spatially independent</span></span>
@@ -481,7 +485,7 @@ p(\rho|\text{rest}) &amp;\propto \left[\prod_{i=1}^n p(\phi_i|\phi_{j, j\in\math
 </details>
 </div>
 <p>Next sample the observations from the data distribution.</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-13_d99684274cc9b207c5959b83d59ea067">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>beta0   <span class="ot">&lt;-</span> <span class="dv">2</span></span>
@@ -490,7 +494,7 @@ p(\rho|\text{rest}) &amp;\propto \left[\prod_{i=1}^n p(\phi_i|\phi_{j, j\in\math
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">matrix</span>(spat_domain<span class="sc">$</span>z, <span class="at">nrow =</span> nsites)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-14_e3b907a2485ef1897c6972301e58ada9">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>npars  <span class="ot">&lt;-</span> <span class="fu">length</span>(beta)</span>
@@ -606,11 +610,11 @@ p(\rho|\text{rest}) &amp;\propto \left[\prod_{i=1}^n p(\phi_i|\phi_{j, j\in\math
 <span id="cb15-111"><a href="#cb15-111" aria-hidden="true" tabindex="-1"></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>4.75 sec elapsed</code></pre>
+<pre><code>4.64 sec elapsed</code></pre>
 </div>
 </div>
 <p>Now let’s inspect some trace plots.</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-15_40369f8a926e0517bd71d77bbe370e38">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>win <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span>niters</span>
@@ -646,7 +650,7 @@ p(\rho|\text{rest}) &amp;\propto \left[\prod_{i=1}^n p(\phi_i|\phi_{j, j\in\math
 </div>
 </div>
 <p>Check trace plots for <span class="math inline">\(\phi\)</span>. 10 random locations.</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-16_285c89f90442518e8a11cebe06b703ec">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>sampled_sites <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>nsites, <span class="at">size =</span> <span class="dv">10</span>)</span>
@@ -688,7 +692,7 @@ p(\rho|\text{rest}) &amp;\propto \left[\prod_{i=1}^n p(\phi_i|\phi_{j, j\in\math
 </div>
 <p>There’s clearly something wrong. I’ll need to revisit this and verify the derivations and/or debug the code.</p>
 <p>What if we compared to the CARBayes package? Note that CARBayes uses a modified version of the model proposed by Leroux (cite)</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-17_6af2aa8d797ed62b4f525c6d73247a2c">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert neighbord matrix from sparse dgCMatrix format.</span></span>
@@ -715,16 +719,16 @@ Number of missing observations - 0
 Posterior quantities and DIC
 
               Mean   2.5%  97.5% n.effective Geweke.diag
-(Intercept) 1.7081 1.6290 1.7887      4936.9        -1.4
-nu2         0.1227 0.0026 0.8442        13.4        -0.9
-tau2        4.6327 2.0237 6.5394        31.2         2.1
+(Intercept) 2.9989 2.8790 3.1165      4675.6        -1.1
+nu2         0.2900 0.0034 1.0582        25.2         0.5
+tau2        3.3438 1.0646 5.3418        31.6        -0.4
 rho         0.9900 0.9900 0.9900          NA          NA
 
-DIC =  -136.5771       p.d =  -59.29066       LMPL =  -68.03 </code></pre>
+DIC =  27.7571       p.d =  -26.96194       LMPL =  -114.25 </code></pre>
 </div>
 </div>
 <p>Let’s look at the CARbayes samples…</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-18_25b72991a1d822327804615eac41775d">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cb.model<span class="sc">$</span>samples<span class="sc">$</span>beta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

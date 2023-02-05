@@ -1,0 +1,16 @@
+{
+  "hash": "b4403e8dd1378bae99e3182609c84b68",
+  "result": {
+    "markdown": "---\ntitle: \"Step 9 - The multivariate CAR model\"\ndescription: \"We explore extensions of the univariate CAR model described in Hierarchical Modeling and Analysis for Spatial data.\"\nauthor:\n  - name: Matthew Shisler\n    affiliation: North Carloina State University - Department of Statistics\n    affiliation-url: https://statistics.sciences.ncsu.edu/ \ncategories: [Bayesian, MCMC, Spatial, CAR] # self-defined categories\ndraft: false \nformat:\n  html: \n    code-fold: true\nexecute: \n  cache: false\n  freeze: auto\n---\n\n::: {.cell}\n\n```{.r .cell-code  code-summary=\"Code: Load the packages\"}\nlibrary(tidyverse)\nlibrary(igraph)\nlibrary(viridis)\n```\n:::\n\n\n## Intro\n\nHere we will extend the univariate CAR model to the multivariate case. \n\nConsider a spatial domain $\\mathcal{D} \\in \\mathbb{R}^2$ that is partitioned into $n$ areal units indexed by $i=1,\\dots,n$. In the univariate case we specified a spatial random effect $\\boldsymbol\\phi = (\\phi_1,\\dots,\\phi_n)$ meant to capture the spatial dependence. In the multivariate case we specify a spatial random vector $\\boldsymbol\\phi^T = (\\boldsymbol\\phi_1, \\boldsymbol\\phi_2,\\dots,\\boldsymbol\\phi_3)$ where each $\\boldsymbol\\phi_i = (\\phi_{i1}, \\phi_{i2},\\dots, \\phi_{ip})$ is $p \\times 1$.\n\nWIP\n\n\n\n\n\n\n\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

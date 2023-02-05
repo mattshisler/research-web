@@ -9,7 +9,7 @@
 <meta name="author" content="Matthew Shisler">
 <meta name="description" content="Starting from the basics. . .">
 
-<title>MS - Step 0 - Bayesian Linear Regression with Gibbs Sampling</title>
+<title>MS - Basics of Timeseries AR1 Models</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -124,7 +124,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 }</script>
 
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -175,7 +174,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Step 0 - Bayesian Linear Regression with Gibbs Sampling</h1>
+<h1 class="title">Basics of Timeseries AR1 Models</h1>
   <div class="quarto-categories">
     <div class="quarto-category">Research</div>
     <div class="quarto-category">Bayesian</div>
@@ -220,138 +219,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <summary>Code: Load the packages</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tictoc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-</div>
-<p>We will start by verifying that our Gibbs sampler is actually working for a very simple case. First, we will simulate data from the model</p>
-<p><span class="math display">\[\begin{align*}
-\mathbf{Y} \sim \text{Normal}_n(\mathbf{X}\mathbf{\boldsymbol\delta}, \; \sigma^2 \mathbf{I}_n)
-\end{align*}\]</span></p>
-<p>where <span class="math inline">\(\mathbf{Y}\)</span> is an <span class="math inline">\(n \times 1\)</span> response vector, <span class="math inline">\(\mathbf{X}\)</span> is an <span class="math inline">\(n \times p\)</span> design matrix, and <span class="math inline">\(\boldsymbol\delta\)</span> is a <span class="math inline">\(p \times 1\)</span> vector of parameters. The observations are mutually independent with constant variance, <span class="math inline">\(\text{Cov}(\mathbf{Y}) = \sigma^2 \mathbf{I}_n\)</span>.</p>
-<p>Next specify priors for <span class="math inline">\(\boldsymbol\delta\)</span> and <span class="math inline">\(\sigma^2\)</span>, chosen for conjugacy, <span class="math display">\[\begin{align*}
-\boldsymbol\delta &amp;\sim \text{Normal}_p(\boldsymbol\beta, \; \mathbf{\Omega})\\
-\sigma^2 &amp;\sim \text{InvGamma}(a, \; b)
-\end{align*}\]</span></p>
-<p>Where <span class="math inline">\(\boldsymbol\beta = \boldsymbol0\)</span>, <span class="math inline">\(\mathbf{\Omega} = \text{diag}((1000^2, 1000^2))\)</span>, and <span class="math inline">\(a = b = 0.1\)</span>. The code alternates between sampling from the full conditionals, <span class="math inline">\(p(\boldsymbol\delta|\mathbf{Y},\sigma^2)\)</span> and <span class="math inline">\(p(\sigma^2|\mathbf{Y},\boldsymbol\delta)\)</span>. In this case <span class="math display">\[\begin{align*}
-  \boldsymbol\delta|\mathbf{Y},\sigma^2 &amp;\sim \text{Normal}\left(V^{-1}M, V^{-1}\right)\\
-  V &amp;= \frac{1}{\sigma^{2}}\mathbf{X}^T\mathbf{X} + \mathbf{\Omega}^{-1}\\
-  M &amp;= \frac{1}{\sigma^{2}}\mathbf{X}^T\mathbf{Y} + \mathbf{\Omega}^{-1}\boldsymbol\beta\\
-  \sigma^2|\mathbf{Y},\boldsymbol\delta &amp;\sim \text{InvGamma}\left(\frac{n}{2} + a, \frac{1}{2}(\mathbf{Y}-\mathbf{X}\boldsymbol\delta)^T(\mathbf{Y}-\mathbf{X}\boldsymbol\delta) + b \right)
-\end{align*}\]</span></p>
-<p>Let’s do a simple example with <span class="math inline">\(n=100\)</span> and <span class="math inline">\(p = 2\)</span>. I will start the parameter index at <span class="math inline">\(1\)</span>, i.e.&nbsp;<span class="math inline">\(\delta_1\)</span> is the intercept.</p>
-<div class="cell">
-<details>
-<summary>Simulate some data</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>n  <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>p  <span class="ot">&lt;-</span> <span class="dv">2</span>    <span class="co">#including intercept</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate some fake data (with intercept)</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>X      <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">1</span>,n), <span class="fu">rnorm</span>(n<span class="sc">*</span>(p<span class="dv">-1</span>))), <span class="at">nrow =</span> n, <span class="at">ncol =</span> p)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>delta0 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(p, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">3</span>)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>Y      <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n, X<span class="sc">%*%</span>delta0, <span class="at">sd =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<div class="cell">
-<details>
-<summary>Run the Gibbs sampler</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set-up</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>niter <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>keep_delta  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow =</span> niter, <span class="at">ncol =</span> p)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>keep_sigma2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>,niter)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># initial values (chosen to be intentionally poor)</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>delta  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>,<span class="dv">10</span>)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>sigma2 <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>keep_delta[<span class="dv">1</span>,] <span class="ot">&lt;-</span> delta</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>keep_sigma2[<span class="dv">1</span>] <span class="ot">&lt;-</span> sigma2</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># prior parameters</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>a  <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>b  <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>,p)</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>Omega_inv <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">rep</span>(<span class="fl">1e-06</span>,p))</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># pre-computes</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>XtY <span class="ot">&lt;-</span> <span class="fu">t</span>(X)<span class="sc">%*%</span>Y</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>XtX <span class="ot">&lt;-</span> <span class="fu">t</span>(X)<span class="sc">%*%</span>X</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>Obeta <span class="ot">&lt;-</span> Omega_inv<span class="sc">%*%</span>beta <span class="co"># not really necessary since beta = 0</span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Gibbs Loop</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="fu">tic</span>()</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>niter){</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Sample from delta full conditional</span></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  M     <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">/</span>sigma2)<span class="sc">*</span>XtY <span class="sc">+</span> Obeta</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  V_inv <span class="ot">&lt;-</span> <span class="fu">solve</span>((<span class="dv">1</span><span class="sc">/</span>sigma2)<span class="sc">*</span>XtX <span class="sc">+</span> Omega_inv)</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  delta <span class="ot">&lt;-</span> V_inv<span class="sc">%*%</span>M<span class="sc">+</span><span class="fu">t</span>(<span class="fu">chol</span>(V_inv))<span class="sc">%*%</span><span class="fu">rnorm</span>(p)</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Sample from sigma2 full conditional</span></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  A      <span class="ot">&lt;-</span> n<span class="sc">/</span><span class="dv">2</span> <span class="sc">+</span> a</span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>  B      <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>)<span class="sc">*</span><span class="fu">sum</span>((Y<span class="sc">-</span>X<span class="sc">%*%</span>delta)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> b</span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>  sigma2 <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="fu">rgamma</span>(<span class="dv">1</span>, A, B)</span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>  <span class="co"># store the results</span></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>  keep_delta[i,]  <span class="ot">&lt;-</span> delta</span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>  keep_sigma2[i] <span class="ot">&lt;-</span> sigma2</span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>0.34 sec elapsed</code></pre>
-</div>
-</div>
-<p>Let’s inspect the resulting trace plots as a quick visual check. The true value of the respective parameter is represented by a red horizontal line. To make the convergence more obvious, I’ve included the poor initial guess.</p>
-<div class="cell">
-<details>
-<summary>Code: Generate trace plots</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>win <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>niter</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(win, keep_delta[win,<span class="dv">1</span>], <span class="at">type =</span> <span class="st">"l"</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="fu">expression</span>(delta[<span class="dv">1</span>]),</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"iter"</span>)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> delta0[<span class="dv">1</span>], <span class="at">col =</span> <span class="st">"red"</span>)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(win, keep_delta[win,<span class="dv">2</span>], <span class="at">type =</span> <span class="st">"l"</span>,</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="fu">expression</span>(delta[<span class="dv">2</span>]),</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"iter"</span>)</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> delta0[<span class="dv">2</span>], <span class="at">col =</span> <span class="st">"red"</span>)</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(win, keep_sigma2[win],   <span class="at">type =</span> <span class="st">"l"</span>,</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="fu">expression</span>(sigma<span class="sc">^</span><span class="dv">2</span>),</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"iter"</span>)</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>We can “burn” the first 100 iterations to see the behavior after convergence. Looks good to me!</p>
-<div class="cell">
-<details>
-<summary>Code: Generate trace plots</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>win <span class="ot">&lt;-</span> <span class="dv">100</span><span class="sc">:</span>niter</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(win, keep_delta[win,<span class="dv">1</span>], <span class="at">type =</span> <span class="st">"l"</span>,</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="fu">expression</span>(delta[<span class="dv">1</span>]),</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"iter"</span>)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> delta0[<span class="dv">1</span>], <span class="at">col =</span> <span class="st">"red"</span>)</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(win, keep_delta[win,<span class="dv">2</span>], <span class="at">type =</span> <span class="st">"l"</span>,</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="fu">expression</span>(delta[<span class="dv">2</span>]),</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"iter"</span>)</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> delta0[<span class="dv">2</span>], <span class="at">col =</span> <span class="st">"red"</span>)</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(win, keep_sigma2[win],   <span class="at">type =</span> <span class="st">"l"</span>,</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="fu">expression</span>(sigma<span class="sc">^</span><span class="dv">2</span>),</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"iter"</span>)</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
-</div>
 </div>
 
 

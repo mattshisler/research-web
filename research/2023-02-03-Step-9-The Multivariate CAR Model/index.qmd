@@ -30,7 +30,7 @@ library(viridis)
 
 Here we will extend the univariate CAR model to the multivariate case. 
 
-Consider a spatial domain $\mathcal{D} \in \mathbb{R}^2$ that is partitioned into $n$ areal units indexed by $i=1,\dots,n$. In the univariate case we specified a spatial random effect $\boldsymbol\phi = (\phi_1,\dots,\phi_n)$ meant to capture the spatial dependence. In the multivariate case we specify a spatial random vector $\boldsymbol\phi^T = (\bolsymbol\phi_1, \boldsymbol\phi_2,\dots,\boldsymbol\phi_3)$ where each $\boldsymbol\phi_i = (\phi_{i1}, \phi_{i2},\dots, \phi_{ip})$ is $\p \times 1$.
+Consider a spatial domain $\mathcal{D} \in \mathbb{R}^2$ that is partitioned into $n$ areal units indexed by $i=1,\dots,n$. In the univariate case we specified a spatial random effect $\boldsymbol\phi = (\phi_1,\dots,\phi_n)$ meant to capture the spatial dependence. In the multivariate case we specify a spatial random vector $\boldsymbol\phi^T = (\boldsymbol\phi_1, \boldsymbol\phi_2,\dots,\boldsymbol\phi_3)$ where each $\boldsymbol\phi_i = (\phi_{i1}, \phi_{i2},\dots, \phi_{ip})$ is $p \times 1$.
 
 WIP
 

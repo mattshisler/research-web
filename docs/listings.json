@@ -26,15 +26,14 @@
       "/research/2023-02-02-Step-6-Application to the Double-Logistic Function/index.html",
       "/research/2023-02-02-Step-7-Bayesian spatial CAR model/index.html",
       "/research/2023-02-02-Step-8-Simulating-Multivariate-Areal-Data/index.html",
-      "/research/2023-02-03-Step-9-The Multivariate CAR Model/index.html",
-      "/research/2023-02-03-Markov-Chain-Sim/index.html"
+      "/research/2023-02-03-Step-9-The Multivariate CAR Model/index.html"
     ]
   },
   {
     "listing": "/learn.html",
     "items": [
-      "/learn/2023-02-02-Step-0-Linear-Regression-Gibbs-Sampling/index.html",
-      "/learn/2023-02-03-Basics of Timeseries AR1 Models/index.html"
+      "/learn/2023-02-03-Basics of Timeseries AR1 Models/index.html",
+      "/learn/2023-02-03-Markov-Chain-Sim/index.html"
     ]
   }
 ]

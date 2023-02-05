@@ -70,9 +70,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-author',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
+      valueNames: ['listing-title','listing-author',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author"],
+      searchColumns: ["listing-title","listing-author"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -135,7 +135,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(11)</span></div><div class="category" data-category="Bayesian">Bayesian <span class="quarto-category-count">(10)</span></div><div class="category" data-category="CAR">CAR <span class="quarto-category-count">(3)</span></div><div class="category" data-category="Hierarchical Model">Hierarchical Model <span class="quarto-category-count">(6)</span></div><div class="category" data-category="MCMC">MCMC <span class="quarto-category-count">(10)</span></div><div class="category" data-category="Research">Research <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Spatial">Spatial <span class="quarto-category-count">(3)</span></div><div class="category" data-category="Stochastic Processes">Stochastic Processes <span class="quarto-category-count">(1)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(10)</span></div><div class="category" data-category="Bayesian">Bayesian <span class="quarto-category-count">(10)</span></div><div class="category" data-category="CAR">CAR <span class="quarto-category-count">(3)</span></div><div class="category" data-category="Hierarchical Model">Hierarchical Model <span class="quarto-category-count">(6)</span></div><div class="category" data-category="MCMC">MCMC <span class="quarto-category-count">(10)</span></div><div class="category" data-category="Research">Research <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Spatial">Spatial <span class="quarto-category-count">(3)</span></div></div></div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -167,12 +167,6 @@ ul.task-list li input[type="checkbox"] {
      <select id="listing-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
        <option value="" disabled="" selected="" hidden="">Order By</option>
        <option value="index" data-direction="asc">Default</option>
-         <option value="listing-date-sort" data-direction="asc">
-          Date - Oldest
-        </option>
-         <option value="listing-date-sort" data-direction="desc">
-          Date - Newest
-        </option>
          <option value="listing-title-sort" data-direction="asc">
           Title
         </option>
@@ -191,9 +185,6 @@ ul.task-list li input[type="checkbox"] {
 <thead>
 <tr>
 <th>
-<a class="sort" data-sort="listing-date-sort" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Date</a>
-</th>
-<th>
 <a class="sort" data-sort="listing-title-sort" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Title</a>
 </th>
 <th>
@@ -202,9 +193,7 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </thead>
 <tbody class="list">
-<tr data-index="0" data-categories="Research,Bayesian,MCMC" data-listing-file-modified-sort="1675394189346" data-listing-reading-time-sort="2.955" data-listing-title-sort="Step 0 - Bayesian Linear Regression with Gibbs Sampling" data-listing-filename-sort="index.qmd">
-<td class="listing-date">
-</td>
+<tr data-index="0" data-categories="Research,Bayesian,MCMC" data-listing-file-modified-sort="1675571083925" data-listing-reading-time-sort="2.955" data-listing-title-sort="Step 0 - Bayesian Linear Regression with Gibbs Sampling" data-listing-filename-sort="index.qmd">
 <td class="listing-title">
 <a href="./research/2023-02-02-Step-0-Linear-Regression-Gibbs-Sampling/index.html" class="title">Step 0 - Bayesian Linear Regression with Gibbs Sampling</a>
 </td>
@@ -212,9 +201,7 @@ ul.task-list li input[type="checkbox"] {
 Matthew Shisler
 </td>
 </tr>
-<tr data-index="1" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675395207637" data-listing-reading-time-sort="4.205" data-listing-title-sort="Step 1 - Bayesian Hierarchical Linear Regression" data-listing-filename-sort="index.qmd">
-<td class="listing-date">
-</td>
+<tr data-index="1" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675571098785" data-listing-reading-time-sort="4.205" data-listing-title-sort="Step 1 - Bayesian Hierarchical Linear Regression" data-listing-filename-sort="index.qmd">
 <td class="listing-title">
 <a href="./research/2023-02-02-Step-1-Hierarchical-Linear-Regression/index.html" class="title">Step 1 - Bayesian Hierarchical Linear Regression</a>
 </td>
@@ -222,9 +209,7 @@ Matthew Shisler
 Matthew Shisler
 </td>
 </tr>
-<tr data-index="2" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675396253951" data-listing-reading-time-sort="4.59" data-listing-title-sort="Step 2 - One Parent Design Matrix" data-listing-filename-sort="index.qmd">
-<td class="listing-date">
-</td>
+<tr data-index="2" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675571112498" data-listing-reading-time-sort="4.59" data-listing-title-sort="Step 2 - One Parent Design Matrix" data-listing-filename-sort="index.qmd">
 <td class="listing-title">
 <a href="./research/2023-02-02-Step-2-Single Parent Design Matrix/index.html" class="title">Step 2 - One Parent Design Matrix</a>
 </td>
@@ -232,9 +217,7 @@ Matthew Shisler
 Matthew Shisler
 </td>
 </tr>
-<tr data-index="3" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675396863941" data-listing-reading-time-sort="6.435" data-listing-title-sort="Step 3 - Add a Second Level Linear Trend" data-listing-filename-sort="index.qmd">
-<td class="listing-date">
-</td>
+<tr data-index="3" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675571132001" data-listing-reading-time-sort="6.435" data-listing-title-sort="Step 3 - Add a Second Level Linear Trend" data-listing-filename-sort="index.qmd">
 <td class="listing-title">
 <a href="./research/2023-02-02-Step-3-Add-a-2nd-Level-Linear-Trend/index.html" class="title">Step 3 - Add a Second Level Linear Trend</a>
 </td>
@@ -242,9 +225,7 @@ Matthew Shisler
 Matthew Shisler
 </td>
 </tr>
-<tr data-index="4" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675401904201" data-listing-reading-time-sort="8.36" data-listing-title-sort="Step 4 - Application to the Linearized Double-Logistic Function" data-listing-filename-sort="index.qmd">
-<td class="listing-date">
-</td>
+<tr data-index="4" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675571141006" data-listing-reading-time-sort="8.36" data-listing-title-sort="Step 4 - Application to the Linearized Double-Logistic Function" data-listing-filename-sort="index.qmd">
 <td class="listing-title">
 <a href="./research/2023-02-02-Step-4-Application-to-the-Linearized-Double-Logistic-Function/index.html" class="title">Step 4 - Application to the Linearized Double-Logistic Function</a>
 </td>
@@ -252,9 +233,7 @@ Matthew Shisler
 Matthew Shisler
 </td>
 </tr>
-<tr data-index="5" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675401635928" data-listing-reading-time-sort="9.83" data-listing-title-sort="Step 5 - Verify Convergence" data-listing-filename-sort="index.qmd">
-<td class="listing-date">
-</td>
+<tr data-index="5" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675571158231" data-listing-reading-time-sort="9.83" data-listing-title-sort="Step 5 - Verify Convergence" data-listing-filename-sort="index.qmd">
 <td class="listing-title">
 <a href="./research/2023-02-02-Step-5-Verify-Convergence/index.html" class="title">Step 5 - Verify Convergence</a>
 </td>
@@ -262,9 +241,7 @@ Matthew Shisler
 Matthew Shisler
 </td>
 </tr>
-<tr data-index="6" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675402021866" data-listing-reading-time-sort="0.04" data-listing-title-sort="Step 6 - Application to the (orignal) Double-logistic function" data-listing-filename-sort="index.qmd">
-<td class="listing-date">
-</td>
+<tr data-index="6" data-categories="Bayesian,MCMC,Hierarchical Model" data-listing-file-modified-sort="1675571168470" data-listing-reading-time-sort="0.04" data-listing-title-sort="Step 6 - Application to the (orignal) Double-logistic function" data-listing-filename-sort="index.qmd">
 <td class="listing-title">
 <a href="./research/2023-02-02-Step-6-Application to the Double-Logistic Function/index.html" class="title">Step 6 - Application to the (orignal) Double-logistic function</a>
 </td>
@@ -272,9 +249,7 @@ Matthew Shisler
 Matthew Shisler
 </td>
 </tr>
-<tr data-index="7" data-categories="Bayesian,MCMC,Spatial,CAR" data-listing-file-modified-sort="1675405191267" data-listing-reading-time-sort="12.46" data-listing-title-sort="Step 7 - Areal data and the spatial CAR model - Basic Example" data-listing-filename-sort="index.qmd">
-<td class="listing-date">
-</td>
+<tr data-index="7" data-categories="Bayesian,MCMC,Spatial,CAR" data-listing-file-modified-sort="1675571188984" data-listing-reading-time-sort="12.46" data-listing-title-sort="Step 7 - Areal data and the spatial CAR model - Basic Example" data-listing-filename-sort="index.qmd">
 <td class="listing-title">
 <a href="./research/2023-02-02-Step-7-Bayesian spatial CAR model/index.html" class="title">Step 7 - Areal data and the spatial CAR model - Basic Example</a>
 </td>
@@ -282,9 +257,7 @@ Matthew Shisler
 Matthew Shisler
 </td>
 </tr>
-<tr data-index="8" data-categories="Bayesian,MCMC,Spatial,CAR" data-listing-file-modified-sort="1675409418178" data-listing-reading-time-sort="3.91" data-listing-title-sort="Step 8 - Simulating Multivariate Areal Data" data-listing-filename-sort="index.qmd">
-<td class="listing-date">
-</td>
+<tr data-index="8" data-categories="Bayesian,MCMC,Spatial,CAR" data-listing-file-modified-sort="1675571208733" data-listing-reading-time-sort="3.91" data-listing-title-sort="Step 8 - Simulating Multivariate Areal Data" data-listing-filename-sort="index.qmd">
 <td class="listing-title">
 <a href="./research/2023-02-02-Step-8-Simulating-Multivariate-Areal-Data/index.html" class="title">Step 8 - Simulating Multivariate Areal Data</a>
 </td>
@@ -292,22 +265,9 @@ Matthew Shisler
 Matthew Shisler
 </td>
 </tr>
-<tr data-index="9" data-categories="Bayesian,MCMC,Spatial,CAR" data-listing-file-modified-sort="1675569610466" data-listing-reading-time-sort="0.405" data-listing-title-sort="Step 9 - The multivariate CAR model" data-listing-filename-sort="index.qmd">
-<td class="listing-date">
-</td>
+<tr data-index="9" data-categories="Bayesian,MCMC,Spatial,CAR" data-listing-file-modified-sort="1675571520629" data-listing-reading-time-sort="0.405" data-listing-title-sort="Step 9 - The multivariate CAR model" data-listing-filename-sort="index.qmd">
 <td class="listing-title">
 <a href="./research/2023-02-03-Step-9-The Multivariate CAR Model/index.html" class="title">Step 9 - The multivariate CAR model</a>
-</td>
-<td class="listing-author">
-Matthew Shisler
-</td>
-</tr>
-<tr data-index="10" data-categories="Stochastic Processes" data-listing-date-sort="1675400400000" data-listing-file-modified-sort="1675566369492" data-listing-reading-time-sort="5.23" data-listing-title-sort="ST746 - Markov Chain Sim" data-listing-filename-sort="index.qmd">
-<td class="listing-date">
-Feb 3, 2023
-</td>
-<td class="listing-title">
-<a href="./research/2023-02-03-Markov-Chain-Sim/index.html" class="title">ST746 - Markov Chain Sim</a>
 </td>
 <td class="listing-author">
 Matthew Shisler
