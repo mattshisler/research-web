@@ -1,0 +1,8 @@
+---
+title: "Learn"
+listing: 
+  contents: learn
+  type: table 
+  sort: "date desc"
+  categories: true
+---

@@ -11,6 +11,8 @@ website:
         text: About
       - href: research.qmd
         text: Research
+      - href: learn.qmd
+        text: Learn
 
 format:
   html:
