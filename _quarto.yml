@@ -9,7 +9,7 @@ website:
     left:
       - href: index.qmd
         text: About
-      - href: posts.qmd
+      - href: research.qmd
         text: Research
 
 format:
