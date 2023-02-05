@@ -11,7 +11,8 @@ format:
   html: 
     code-fold: true
 execute: 
-  cache: false
+  cache: true
+  freeze: auto
 ---
 
 

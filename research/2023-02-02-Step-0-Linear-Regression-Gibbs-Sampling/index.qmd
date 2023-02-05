@@ -10,6 +10,9 @@ draft: false
 format:
   html: 
     code-fold: true
+    
+execute:
+  freeze: auto
 ---
 
 
