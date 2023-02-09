@@ -17,7 +17,49 @@ format:
 #| label: load-packages
 #| output: false
 #| code-summary: "Code: Load the packages"
-
-library(tictoc)
 ```
+
+
+This will be a short description of the basic auto-regressive lag-1 model in time series analysis.
+
+Consider a simple situation where a researcher makes $n$ measurements $y_1,\dots,y_n$, on some scientific object of interest and further suppose that we wish to model these observations as independent and identically distributed Gaussian random variables $Y_i$ with unknown mean $\mu$ and variance $\sigma^2$,
+
+$$
+Y_i \sim \text{N}(\mu, \sigma^2)
+$$
+
+Estimating $\mu$ and $\sigma^$ is straightforward enough by maximizing the likelihood and applying the usual bias correction:
+
+$$
+\widehat\mu = \frac{1}{n}\sum_{i=1}^n y_i \quad \quad \quad \widehat\sigma^2 = \frac{1}{n-1}\sum_{i=1}^n (y_i - \widehat\mu)^2
+$$
+
+In reality these measurements were most likely collected sequentially and indexed by time $t$, $Y_t$, $t = 1, \dots, n$. Depending on the nature of the scientific object being measured it is not unreasonable to suspect that a measurement made at time $t$ may be correlated with a measurement made at time $t-1$ and it would be wise for the scientific researcher to account for this fact in their statistical analysis.
+
+To illustrate the issue let's consider an example where we simulate some iid data and some correlated data.
+
+```{r}
+n  <- 1000
+mu <- 0
+sd <- 1
+
+y.iid <- rnorm(n, mu, sd)
+
+plot(y.iid)
+plot(density(y.iid))
+```
+
+```{r}
+y.ts <- arima.sim(list(ar=0.99),n=n)
+
+plot(y.ts)
+plot(density(y.ts))
+
+```
+
+
+
+
+
+
 
