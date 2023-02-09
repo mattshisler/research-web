@@ -1,0 +1,8 @@
+---
+title: "Notes"
+listing: 
+  contents: notes
+  type: table 
+  sort: "date desc"
+  categories: true
+---

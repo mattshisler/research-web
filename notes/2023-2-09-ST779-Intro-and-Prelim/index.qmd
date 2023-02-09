@@ -1,0 +1,189 @@
+---
+title: "ST779 - Intro and Prelims"
+description: ""
+author:
+  - name: Matthew Shisler
+    affiliation: North Carloina State University - Department of Statistics
+    affiliation-url: https://statistics.sciences.ncsu.edu/ 
+categories: [Adv Prob, ST 779] # self-defined categories
+draft: true
+format:
+  html: 
+    code-fold: true
+---
+
+
+```{r}
+#| label: load-packages
+#| output: false
+#| code-summary: "Code: Load the packages"
+```
+
+
+## Concepts from set theory
+
+These notes take advantage of [naive set theory](https://en.wikipedia.org/wiki/Naive_set_theory) in the sense that we will use natural language to describe sets and operations on sets. 
+
+
+
+## Relations
+
+### Containment
+:::{.callout-note}
+## **Definition** {#callout-1}
+$A$ is a subset of $B$, written $A \subset B$ or $B \supset B$, iff $A \cap B = A$ or equivalently iff $\omega \in A \implies \omega \in B$.
+:::
+
+Properties:
+
+* $A \subset A$
+* $A \subset B$ and $B \subset C$ $\implies$ $A \subset C$
+---
+
+### Equality 
+:::{.callout-note}
+## **Definition** {#callout-1}
+Two sets $A$ and $B$ are *equal*, $A = B$, iff $A \subset B$ and $B \subset A$. This means $\omega \in A$ iff $\omega \in B$.
+:::
+Notes:
+
+* A **proper** subset is one which satisfies $A \subset B$ but $A \ne B$.
+---
+
+## Set Operations
+
+### Complementation
+:::{.callout-note}
+## **Definition** {#callout-1}
+The *complement* of a subset $A \subset \Omega$ is
+$$
+A^c := \{\omega : \omega \notin A\}
+$$
+:::
+Notes:
+
+* 
+
+Properties:
+
+* $A \subset B$ iff $B^c \subset A^c$
+---
+
+
+### Intersection
+:::{.callout-note}
+## **Definition** {#callout-1}
+Suppose $T$ is some index set and for each $t \in T$ we are given $A_t \in \Omega$. The *intersection* of $A_t$ is
+$$
+\bigcap_{t \in T} A_t := \{\omega : \omega \in A_t, \text{ for all } t \in T \}
+$$
+:::
+Notes:
+
+* When considering a small number of sets a different version of the "cap" symbol is used, $A \cap B$.
+
+Properties:
+
+* If $C \subset A$ and $C \subset B$, then $C \subset (A \cap B)$
+---
+
+### Union
+:::{.callout-note}
+## **Definition** {#callout-1}
+Suppose $T$ is some index set and for each $t \in T$ we are given $A_t \in \Omega$. The *union* of $A_t$ is
+$$
+\bigcup_{t \in T} A_t := \{\omega : \omega \in A_t, \text{ for some } t \in T \}
+$$
+:::
+Notes:
+
+* When considering a small number of sets a different version of the "cup" symbol is used, $A \cup B$.
+
+Properties:
+
+* If $A \subset C$ and $B \subset C$, then $(A \cup B) \subset C$
+---
+
+### Set Difference
+:::{.callout-note}
+## **Definition** {#callout-1}
+Given two sets $A$ and $B$, the elements that are in $A$ but not in $B$ is
+$$
+A \setminus B = A \cap B^c
+$$
+:::
+Notes:
+
+* Sometimes called "set minus".
+---
+
+### Symmetric Difference
+:::{.callout-note}
+## **Definition** {#callout-1}
+Given two sets $A$ and $B$, the set of elements that are in one but not in both is the *symmetric difference*
+$$
+A \triangle B = (A \setminus B) \cup (B \setminus A)
+$$
+:::
+---
+
+## Common Terminologies
+
+## Arbitrary Set Operations
+
+## Countable Set Operations
+
+## Disjointification
+
+Later we will see that the probability of the union of disjoint events is equal to the sum of their probabilities. When faced with an arbitrary union of sets which are *not* disjoint, a common strategy is to write an equivalent union in terms of disjoint sets. This is called *disjointification*.
+
+The disjoint sets in this equivalent union are constructed from the arbitrary sets in the original union.
+
+As a simple example consider two sets $A$ and $B$ not necessarily disjoint. Then consider the two sets $A$ and $B \setminus A$. Their unions are equivalent $A \cup B = A \cup (B \setminus A)$, but now we know $A \cap (B \setminus A) = \emptyset$.
+
+From now on, we will use a square "cup" to quickly distinguish when a union is taken over *disjoint* sets.
+
+$$
+A \sqcup B
+$$
+
+is the same as
+
+$$
+A \cup B \text{ with } A \cap B = \emptyset.
+$$
+
+
+Disjointification can generalized to any number of sets. Consider the sets $B, C$, and $D$, not necessarily disjoint. Their union can be written as a union of disjoint sets,
+
+$$
+B \cup C \cup D = B \sqcup (C\setminus B) \sqcup (D \setminus (B \cup C)) 
+$$
+
+But this can get cumbersome when the number of sets becomes large. Instead, arrange the sets into an arbitrary sequence. By this I mean assign some ordering to the sets. There doesn't need to be anything special about the ordering. It only facilitates book-keeping. For example, we can assign labels to the sets $B, C$ and $D$, say $A_1 = B, A_2 = C, A_3 = D$. Any other ordering is also acceptable. Now we can equivalently write,
+
+$$
+B \cup C \cup D = \bigcup_{i=1}^3A_i = \bigsqcup_{i=1}^3\left(A_i \setminus \left(\bigcup_{j=1}^{i-1}A_j\right)\right)
+$$
+
+The result looks a little ugly, but it is powerful when considering the union of many sets.
+
+
+## Limits (sup and inf)
+
+
+
+
+
+## Cartesian Products
+
+## Inverse Map
+
+## Section
+
+## Indicator Function
+
+
+
+
+

@@ -13,6 +13,8 @@ website:
         text: Research
       - href: learn.qmd
         text: Learn
+      - href: notes.qmd
+        text: Notes
 
 format:
   html:

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>MS - Learn</title>
+<title>MS - Notes</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -70,9 +70,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-author',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
+      valueNames: ['listing-title','listing-author',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author"],
+      searchColumns: ["listing-title","listing-author"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -120,11 +120,11 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Research</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./learn.html" aria-current="page">
+    <a class="nav-link" href="./learn.html">
  <span class="menu-text">Learn</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./notes.html">
+    <a class="nav-link active" href="./notes.html" aria-current="page">
  <span class="menu-text">Notes</span></a>
   </li>  
 </ul>
@@ -139,13 +139,13 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Bayesian">Bayesian <span class="quarto-category-count">(1)</span></div><div class="category" data-category="MCMC">MCMC <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Research">Research <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Stochastic Processes">Stochastic Processes <span class="quarto-category-count">(1)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Adv Prob">Adv Prob <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ST 746">ST 746 <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ST 779">ST 779 <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Stochastic Proccesses">Stochastic Proccesses <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Learn</h1>
+<h1 class="title">Notes</h1>
 </div>
 
 
@@ -171,12 +171,6 @@ ul.task-list li input[type="checkbox"] {
      <select id="listing-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
        <option value="" disabled="" selected="" hidden="">Order By</option>
        <option value="index" data-direction="asc">Default</option>
-         <option value="listing-date-sort" data-direction="asc">
-          Date - Oldest
-        </option>
-         <option value="listing-date-sort" data-direction="desc">
-          Date - Newest
-        </option>
          <option value="listing-title-sort" data-direction="asc">
           Title
         </option>
@@ -195,9 +189,6 @@ ul.task-list li input[type="checkbox"] {
 <thead>
 <tr>
 <th>
-<a class="sort" data-sort="listing-date-sort" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Date</a>
-</th>
-<th>
 <a class="sort" data-sort="listing-title-sort" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Title</a>
 </th>
 <th>
@@ -206,22 +197,17 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </thead>
 <tbody class="list">
-<tr data-index="0" data-categories="Research,Bayesian,MCMC" data-listing-file-modified-sort="1675574416979" data-listing-reading-time-sort="0.98" data-listing-title-sort="Basics of Timeseries AR1 Models" data-listing-filename-sort="index.qmd">
-<td class="listing-date">
-</td>
+<tr data-index="0" data-categories="Stochastic Proccesses,ST 746" data-listing-file-modified-sort="1675981823689" data-listing-reading-time-sort="0.745" data-listing-title-sort="ST746 - Computer Assignment 1" data-listing-filename-sort="index.qmd">
 <td class="listing-title">
-<a href="./learn/2023-02-03-Basics of Timeseries AR1 Models/index.html" class="title">Basics of Timeseries AR1 Models</a>
+<a href="./notes/2023-02-09-ST779-Computer-Assignment-1/index.html" class="title">ST746 - Computer Assignment 1</a>
 </td>
 <td class="listing-author">
 Matthew Shisler
 </td>
 </tr>
-<tr data-index="1" data-categories="Stochastic Processes" data-listing-date-sort="1675400400000" data-listing-file-modified-sort="1675566369492" data-listing-reading-time-sort="5.23" data-listing-title-sort="ST746 - Markov Chain Sim" data-listing-filename-sort="index.qmd">
-<td class="listing-date">
-Feb 3, 2023
-</td>
+<tr data-index="1" data-categories="Adv Prob,ST 779" data-listing-file-modified-sort="1675980736464" data-listing-reading-time-sort="3.41" data-listing-title-sort="ST779 - Intro and Prelims" data-listing-filename-sort="index.qmd">
 <td class="listing-title">
-<a href="./learn/2023-02-03-Markov-Chain-Sim/index.html" class="title">ST746 - Markov Chain Sim</a>
+<a href="./notes/YYYY-MM-DD-Template/index.html" class="title">ST779 - Intro and Prelims</a>
 </td>
 <td class="listing-author">
 Matthew Shisler

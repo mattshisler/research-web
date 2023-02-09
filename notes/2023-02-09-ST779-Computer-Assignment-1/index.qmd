@@ -1,0 +1,99 @@
+---
+title: "ST746 - Computer Assignment 1"
+description: ""
+author:
+  - name: Matthew Shisler
+    affiliation: North Carloina State University - Department of Statistics
+    affiliation-url: https://statistics.sciences.ncsu.edu/ 
+categories: [Stochastic Proccesses, ST 746] # self-defined categories
+draft: false 
+format:
+  html: 
+    code-fold: true
+---
+
+
+
+## Step 1
+
+Create a vector of transition probabilities from a single state.
+```{r}
+num.states <- 8
+
+t1 <- runif(num.states)
+t1 <- t1/sum(t1)
+
+round(t1,2)
+```
+
+## Step 2
+
+Create the entire transition matrix.
+```{r}
+P <- matrix(runif(num.states^2), nrow = num.states)
+P <- P/rowSums(P)
+
+```
+
+## Step 3
+
+Simulate the Markov chain with initial state $X_0 = 1$. Store the proportion of time the chain was in state $j$, $j=1,\dots,8$.
+```{r}
+
+
+```
+
+## Step 4
+
+Simulate the Markov chain with initial states $X_0 = 2,\dots,8$. For each initial state, store the proportion of time the chain was in state $j$, $j=1,\dots,8$.
+
+```{r}
+
+
+```
+
+
+## Step 5
+
+Compare the proportion vectors from questions 3 and 4.
+
+```{r}
+
+
+```
+
+## Step 6
+
+Compute the $P^{100}$ matrix multiplication. Are its rows approx equal? How do they compare the row vectors from step 5?
+
+```{r}
+
+
+```
+
+
+## Step 7
+
+Solve the equation of stationarity $\boldsymbol\mu = \boldsymbol\mu \mathbf{P}$. Is the solution nearly equal to that in step 6?
+
+```{r}
+
+
+```
+
+## Step 8
+
+
+Write your own conclusions based on this simulation experiment and give an explanation of the phenomenon you observe.
+```{r}
+
+
+```
+
+
+
+
+
+
+
+

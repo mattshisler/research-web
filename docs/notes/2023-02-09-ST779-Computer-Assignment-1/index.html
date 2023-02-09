@@ -7,9 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Matthew Shisler">
-<meta name="description" content="Starting from the basics. . .">
 
-<title>MS - Basics of Timeseries AR1 Models</title>
+<title>MS - ST746 - Computer Assignment 1</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -172,26 +171,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#step-1" id="toc-step-1" class="nav-link active" data-scroll-target="#step-1">Step 1</a></li>
+  <li><a href="#step-2" id="toc-step-2" class="nav-link" data-scroll-target="#step-2">Step 2</a></li>
+  <li><a href="#step-3" id="toc-step-3" class="nav-link" data-scroll-target="#step-3">Step 3</a></li>
+  <li><a href="#step-4" id="toc-step-4" class="nav-link" data-scroll-target="#step-4">Step 4</a></li>
+  <li><a href="#step-5" id="toc-step-5" class="nav-link" data-scroll-target="#step-5">Step 5</a></li>
+  <li><a href="#step-6" id="toc-step-6" class="nav-link" data-scroll-target="#step-6">Step 6</a></li>
+  <li><a href="#step-7" id="toc-step-7" class="nav-link" data-scroll-target="#step-7">Step 7</a></li>
+  <li><a href="#step-8" id="toc-step-8" class="nav-link" data-scroll-target="#step-8">Step 8</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Basics of Timeseries AR1 Models</h1>
+<h1 class="title">ST746 - Computer Assignment 1</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">Research</div>
-    <div class="quarto-category">Bayesian</div>
-    <div class="quarto-category">MCMC</div>
+    <div class="quarto-category">Stochastic Proccesses</div>
+    <div class="quarto-category">ST 746</div>
   </div>
   </div>
 
-<div>
-  <div class="description">
-    Starting from the basics. . .
-  </div>
-</div>
 
 <div class="quarto-title-meta-author">
   <div class="quarto-title-meta-heading">Author</div>
@@ -219,62 +225,79 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<div class="cell">
-
-</div>
-<p>This will be a short description of the basic auto-regressive lag-1 model in time series analysis.</p>
-<p>Consider a simple situation where a researcher makes <span class="math inline">\(n\)</span> measurements <span class="math inline">\(y_1,\dots,y_n\)</span>, on some scientific object of interest and further suppose that we wish to model these observations as independent and identically distributed Gaussian random variables <span class="math inline">\(Y_i\)</span> with unknown mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span>,</p>
-<p><span class="math display">\[
-Y_i \sim \text{N}(\mu, \sigma^2)
-\]</span></p>
-<p>Estimating <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^\)</span> is straightforward enough by maximizing the likelihood and applying the usual bias correction:</p>
-<p><span class="math display">\[
-\widehat\mu = \frac{1}{n}\sum_{i=1}^n y_i \quad \quad \quad \widehat\sigma^2 = \frac{1}{n-1}\sum_{i=1}^n (y_i - \widehat\mu)^2
-\]</span></p>
-<p>In reality these measurements were most likely collected sequentially and indexed by time <span class="math inline">\(t\)</span>, <span class="math inline">\(Y_t\)</span>, <span class="math inline">\(t = 1, \dots, n\)</span>. Depending on the nature of the scientific object being measured it is not unreasonable to suspect that a measurement made at time <span class="math inline">\(t\)</span> may be correlated with a measurement made at time <span class="math inline">\(t-1\)</span> and it would be wise for the scientific researcher to account for this fact in their statistical analysis.</p>
-<p>To illustrate the issue let’s consider an example where we simulate some iid data and some correlated data.</p>
+<section id="step-1" class="level2">
+<h2 class="anchored" data-anchor-id="step-1">Step 1</h2>
+<p>Create a vector of transition probabilities from a single state.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>n  <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>sd <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>y.iid <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, mu, sd)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(y.iid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>num.states <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(num.states)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> t1<span class="sc">/</span><span class="fu">sum</span>(t1)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(t1,<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
-</div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(y.iid))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid" width="672"></p>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.13 0.17 0.01 0.20 0.09 0.05 0.16 0.19</code></pre>
 </div>
 </div>
+</section>
+<section id="step-2" class="level2">
+<h2 class="anchored" data-anchor-id="step-2">Step 2</h2>
+<p>Create the entire transition matrix.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>y.ts <span class="ot">&lt;-</span> <span class="fu">arima.sim</span>(<span class="fu">list</span>(<span class="at">ar=</span><span class="fl">0.99</span>),<span class="at">n=</span>n)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(y.ts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">runif</span>(num.states<span class="sc">^</span><span class="dv">2</span>), <span class="at">nrow =</span> num.states)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> P<span class="sc">/</span><span class="fu">rowSums</span>(P)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
 </div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(y.ts))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-3-2.png" class="img-fluid" width="672"></p>
+</section>
+<section id="step-3" class="level2">
+<h2 class="anchored" data-anchor-id="step-3">Step 3</h2>
+<p>Simulate the Markov chain with initial state <span class="math inline">\(X_0 = 1\)</span>. Store the proportion of time the chain was in state <span class="math inline">\(j\)</span>, <span class="math inline">\(j=1,\dots,8\)</span>.</p>
+<div class="cell">
+
 </div>
+</section>
+<section id="step-4" class="level2">
+<h2 class="anchored" data-anchor-id="step-4">Step 4</h2>
+<p>Simulate the Markov chain with initial states <span class="math inline">\(X_0 = 2,\dots,8\)</span>. For each initial state, store the proportion of time the chain was in state <span class="math inline">\(j\)</span>, <span class="math inline">\(j=1,\dots,8\)</span>.</p>
+<div class="cell">
+
+</div>
+</section>
+<section id="step-5" class="level2">
+<h2 class="anchored" data-anchor-id="step-5">Step 5</h2>
+<p>Compare the proportion vectors from questions 3 and 4.</p>
+<div class="cell">
+
+</div>
+</section>
+<section id="step-6" class="level2">
+<h2 class="anchored" data-anchor-id="step-6">Step 6</h2>
+<p>Compute the <span class="math inline">\(P^{100}\)</span> matrix multiplication. Are its rows approx equal? How do they compare the row vectors from step 5?</p>
+<div class="cell">
+
+</div>
+</section>
+<section id="step-7" class="level2">
+<h2 class="anchored" data-anchor-id="step-7">Step 7</h2>
+<p>Solve the equation of stationarity <span class="math inline">\(\boldsymbol\mu = \boldsymbol\mu \mathbf{P}\)</span>. Is the solution nearly equal to that in step 6?</p>
+<div class="cell">
+
+</div>
+</section>
+<section id="step-8" class="level2">
+<h2 class="anchored" data-anchor-id="step-8">Step 8</h2>
+<p>Write your own conclusions based on this simulation experiment and give an explanation of the phenomenon you observe.</p>
+<div class="cell">
+
 </div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
