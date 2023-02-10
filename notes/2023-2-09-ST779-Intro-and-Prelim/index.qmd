@@ -31,7 +31,7 @@ These notes take advantage of [naive set theory](https://en.wikipedia.org/wiki/N
 ### Containment
 :::{.callout-note}
 ## **Definition** {#callout-1}
-$A$ is a subset of $B$, written $A \subset B$ or $B \supset B$, iff $A \cap B = A$ or equivalently iff $\omega \in A \implies \omega \in B$.
+$A$ is a subset of $B$, written $A \subset B$ or $B \supset A$, iff $A \cap B = A$ or equivalently iff $\omega \in A \implies \omega \in B$.
 :::
 
 Properties:
@@ -62,7 +62,7 @@ $$
 :::
 Notes:
 
-* 
+* The complement is taken with respect to some universal set $\Omega$.
 
 Properties:
 
@@ -154,7 +154,7 @@ A \cup B \text{ with } A \cap B = \emptyset.
 $$
 
 
-Disjointification can generalized to any number of sets. Consider the sets $B, C$, and $D$, not necessarily disjoint. Their union can be written as a union of disjoint sets,
+Disjointification can be generalized to any number of sets. Consider the sets $B, C$, and $D$, not necessarily disjoint. Their union can be written as a union of disjoint sets,
 
 $$
 B \cup C \cup D = B \sqcup (C\setminus B) \sqcup (D \setminus (B \cup C)) 
@@ -171,9 +171,82 @@ The result looks a little ugly, but it is powerful when considering the union of
 
 ## Limits (sup and inf)
 
+Here we discuss the notion of *limit* for a sequence of *sets*. First some definitions,
 
+:::{.callout-note}
+## **Definition** {#callout-1}
+Let $A_n \subset \Omega$ be a sequence of sets. The *infimum* of the sequence is
+a tail intersection where the "tail" is defined by some $n$.
+$$
+\inf_{k\ge n} A_k := \bigcap_{k=n}^\infty A_k
+$$
+:::
 
+Notes:
 
+* Taking an intersection over sets will always yield a set that is at most the same cardinality. 
+
+:::{.callout-note}
+## **Definition** {#callout-1}
+Let $A_n \subset \Omega$ be a sequence of sets. The *supremum* of the sequence is
+a tail union where the "tail" is defined by some $n$.
+$$
+\sup_{k\ge n}A_k = \bigcup_{k=n}^\infty A_k
+$$
+:::
+Notes:
+
+* Taking a union over sets will always yield a set that is at least the same cardinality.
+
+:::{.callout-note}
+## **Definition** {#callout-1}
+Let $A_n \subset \Omega$ be a sequence of sets. The *limit infimum* of the sequence is
+a union of decreasing tail intersections.
+$$
+\liminf_{n \rightarrow \infty} A_n := \bigcup_{n=1}^\infty\bigcap_{k=n}^\infty A_k
+$$
+:::
+Notes:
+
+* First take intersections over progressively "shorter" tails, then take the union of the resulting sets.
+
+:::{.callout-note}
+## **Definition** {#callout-1}
+Let $A_n \subset \Omega$ be a sequence of sets. The *limit supremum* of the sequence is an intersection of tail unions.
+$$
+\limsup_{n \rightarrow \infty} A_n = \bigcap_{n=1}^\infty\bigcup_{k=n}^\infty A_k
+$$
+then $B$ is called the *limit* of $B_n$.
+:::
+Notes:
+
+* First take unions over progressively "shorter" tails, then take the intersection of the resulting sets.
+
+The notion of the limit is defined,
+
+:::{.callout-note}
+## **Definition** {#callout-1}
+If for some sequence $\{B_n\}$ of subset of $\Omega$,
+$$
+\limsup_{n \rightarrow \infty}B_n = \liminf_{n \rightarrow \infty} B_n = B
+$$
+:::
+
+Some connections,
+
+For a sequence of subsets $\{A_n\}$, $A_n \subset \Omega$,
+$$
+\liminf_{n \rightarrow \infty} A_n \subset \limsup_{n \rightarrow \infty} A_n
+$$
+Proof:
+
+(TBD) - 
+
+For a sequence of subsets $\{A_n\}$, $A_n \subset \Omega$,
+
+$$
+\left( \liminf_{n \rightarrow \infty} A_n \right)^c = \limsup_{n \rightarrow\infty} A_n^c
+$$
 
 ## Cartesian Products
 

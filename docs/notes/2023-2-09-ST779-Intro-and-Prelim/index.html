@@ -198,7 +198,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><span class="math inline">\(A\)</span> is a subset of <span class="math inline">\(B\)</span>, written <span class="math inline">\(A \subset B\)</span> or <span class="math inline">\(B \supset B\)</span>, iff <span class="math inline">\(A \cap B = A\)</span> or equivalently iff <span class="math inline">\(\omega \in A \implies \omega \in B\)</span>.</p>
+<p><span class="math inline">\(A\)</span> is a subset of <span class="math inline">\(B\)</span>, written <span class="math inline">\(A \subset B\)</span> or <span class="math inline">\(B \supset A\)</span>, iff <span class="math inline">\(A \cap B = A\)</span> or equivalently iff <span class="math inline">\(\omega \in A \implies \omega \in B\)</span>.</p>
 </div>
 </div>
 <p>Properties:</p>
@@ -251,7 +251,7 @@ A^c := \{\omega : \omega \notin A\}
 </div>
 <p>Notes:</p>
 <ul>
-<li></li>
+<li>The complement is taken with respect to some universal set <span class="math inline">\(\Omega\)</span>.</li>
 </ul>
 <p>Properties:</p>
 <ul>
@@ -378,7 +378,7 @@ A \sqcup B
 <p><span class="math display">\[
 A \cup B \text{ with } A \cap B = \emptyset.
 \]</span></p>
-<p>Disjointification can generalized to any number of sets. Consider the sets <span class="math inline">\(B, C\)</span>, and <span class="math inline">\(D\)</span>, not necessarily disjoint. Their union can be written as a union of disjoint sets,</p>
+<p>Disjointification can be generalized to any number of sets. Consider the sets <span class="math inline">\(B, C\)</span>, and <span class="math inline">\(D\)</span>, not necessarily disjoint. Their union can be written as a union of disjoint sets,</p>
 <p><span class="math display">\[
 B \cup C \cup D = B \sqcup (C\setminus B) \sqcup (D \setminus (B \cup C))
 \]</span></p>
@@ -390,6 +390,108 @@ B \cup C \cup D = \bigcup_{i=1}^3A_i = \bigsqcup_{i=1}^3\left(A_i \setminus \lef
 </section>
 <section id="limits-sup-and-inf" class="level2">
 <h2 class="anchored" data-anchor-id="limits-sup-and-inf">Limits (sup and inf)</h2>
+<p>Here we discuss the notion of <em>limit</em> for a sequence of <em>sets</em>. First some definitions,</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+<strong>Definition</strong>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let <span class="math inline">\(A_n \subset \Omega\)</span> be a sequence of sets. The <em>infimum</em> of the sequence is a tail intersection where the “tail” is defined by some <span class="math inline">\(n\)</span>. <span class="math display">\[
+\inf_{k\ge n} A_k := \bigcap_{k=n}^\infty A_k
+\]</span></p>
+</div>
+</div>
+<p>Notes:</p>
+<ul>
+<li>Taking an intersection over sets will always yield a set that is at most the same cardinality.</li>
+</ul>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+<strong>Definition</strong>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let <span class="math inline">\(A_n \subset \Omega\)</span> be a sequence of sets. The <em>supremum</em> of the sequence is a tail union where the “tail” is defined by some <span class="math inline">\(n\)</span>. <span class="math display">\[
+\sup_{k\ge n}A_k = \bigcup_{k=n}^\infty A_k
+\]</span></p>
+</div>
+</div>
+<p>Notes:</p>
+<ul>
+<li>Taking a union over sets will always yield a set that is at least the same cardinality.</li>
+</ul>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+<strong>Definition</strong>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let <span class="math inline">\(A_n \subset \Omega\)</span> be a sequence of sets. The <em>limit infimum</em> of the sequence is a union of decreasing tail intersections. <span class="math display">\[
+\liminf_{n \rightarrow \infty} A_n := \bigcup_{n=1}^\infty\bigcap_{k=n}^\infty A_k
+\]</span></p>
+</div>
+</div>
+<p>Notes:</p>
+<ul>
+<li>First take intersections over progressively “shorter” tails, then take the union of the resulting sets.</li>
+</ul>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+<strong>Definition</strong>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let <span class="math inline">\(A_n \subset \Omega\)</span> be a sequence of sets. The <em>limit supremum</em> of the sequence is an intersection of tail unions. <span class="math display">\[
+\limsup_{n \rightarrow \infty} A_n = \bigcap_{n=1}^\infty\bigcup_{k=n}^\infty A_k
+\]</span> then <span class="math inline">\(B\)</span> is called the <em>limit</em> of <span class="math inline">\(B_n\)</span>.</p>
+</div>
+</div>
+<p>Notes:</p>
+<ul>
+<li>First take unions over progressively “shorter” tails, then take the intersection of the resulting sets.</li>
+</ul>
+<p>The notion of the limit is defined,</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+<strong>Definition</strong>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If for some sequence <span class="math inline">\(\{B_n\}\)</span> of subset of <span class="math inline">\(\Omega\)</span>, <span class="math display">\[
+\limsup_{n \rightarrow \infty}B_n = \liminf_{n \rightarrow \infty} B_n = B
+\]</span></p>
+</div>
+</div>
+<p>Some connections,</p>
+<p>For a sequence of subsets <span class="math inline">\(\{A_n\}\)</span>, <span class="math inline">\(A_n \subset \Omega\)</span>, <span class="math display">\[
+\liminf_{n \rightarrow \infty} A_n \subset \limsup_{n \rightarrow \infty} A_n
+\]</span> Proof:</p>
+<p>(TBD) -</p>
+<p>For a sequence of subsets <span class="math inline">\(\{A_n\}\)</span>, <span class="math inline">\(A_n \subset \Omega\)</span>,</p>
+<p><span class="math display">\[
+\left( \liminf_{n \rightarrow \infty} A_n \right)^c = \limsup_{n \rightarrow\infty} A_n^c
+\]</span></p>
 </section>
 <section id="cartesian-products" class="level2">
 <h2 class="anchored" data-anchor-id="cartesian-products">Cartesian Products</h2>
