@@ -9,10 +9,13 @@ categories: [Stochastic Proccesses, ST 746] # self-defined categories
 draft: false 
 format:
   html: 
-    code-fold: true
+    code-fold: false
 ---
 
-
+```{r, include=FALSE}
+library(expm)
+library(MASS)
+```
 
 ## Step 1
 
@@ -28,18 +31,30 @@ round(t1,2)
 
 ## Step 2
 
-Create the entire transition matrix.
+Create the entire transition matrix. Note this actually throws out the first vector we
+created in step 1, but fulfills the overall spirit of the exercise.
 ```{r}
 P <- matrix(runif(num.states^2), nrow = num.states)
 P <- P/rowSums(P)
-
+P
 ```
 
 ## Step 3
 
 Simulate the Markov chain with initial state $X_0 = 1$. Store the proportion of time the chain was in state $j$, $j=1,\dots,8$.
 ```{r}
+current.state <- 1
+num.steps <- 10000
+visits1 <- rep(0, num.states)
 
+for (i in 1:num.steps){
+
+  visits1[current.state] <- visits1[current.state] + 1
+  current.state <- sample(1:num.states, 1, prob = P[current.state,])
+    
+}
+
+round(visits1/sum(visits1),3)
 
 ```
 
@@ -48,7 +63,22 @@ Simulate the Markov chain with initial state $X_0 = 1$. Store the proportion of 
 Simulate the Markov chain with initial states $X_0 = 2,\dots,8$. For each initial state, store the proportion of time the chain was in state $j$, $j=1,\dots,8$.
 
 ```{r}
+visits2    <- matrix(0, nrow=num.states-1, ncol=num.states)
+num.steps <- 10000
 
+for (j in 1:(num.states-1)){
+  current.state <- j
+  
+  for (i in 1:num.steps){
+
+    visits2[j, current.state] <- visits2[j, current.state] + 1
+    current.state <- sample(1:num.states, 1, prob = P[current.state,])
+    
+  }
+  
+}
+
+round(visits2/rowSums(visits2),3)
 
 ```
 
@@ -59,7 +89,8 @@ Compare the proportion vectors from questions 3 and 4.
 
 ```{r}
 
-
+boxplot(visits2/rowSums(visits2))
+points(visits1/sum(visits1), col = "red", cex = 8, pch = ".")
 ```
 
 ## Step 6
@@ -67,7 +98,7 @@ Compare the proportion vectors from questions 3 and 4.
 Compute the $P^{100}$ matrix multiplication. Are its rows approx equal? How do they compare the row vectors from step 5?
 
 ```{r}
-
+P %^% 100
 
 ```
 
@@ -76,8 +107,12 @@ Compute the $P^{100}$ matrix multiplication. Are its rows approx equal? How do t
 
 Solve the equation of stationarity $\boldsymbol\mu = \boldsymbol\mu \mathbf{P}$. Is the solution nearly equal to that in step 6?
 
-```{r}
+```{r, warning=F}
 
+e    <- eigen(P)
+lvec <- MASS::ginv(e$vectors)
+
+as.numeric(lvec[1,]/sum(lvec[1,]))
 
 ```
 
@@ -85,10 +120,8 @@ Solve the equation of stationarity $\boldsymbol\mu = \boldsymbol\mu \mathbf{P}$.
 
 
 Write your own conclusions based on this simulation experiment and give an explanation of the phenomenon you observe.
-```{r}
 
 
-```
 
 
 
