@@ -291,7 +291,7 @@
     "href": "notes/2023-02-09-ST779-Computer-Assignment-1/index.html",
     "title": "ST746 - Computer Assignment 1",
     "section": "",
-    "text": "Code\nlibrary(expm)\n\n\nLoading required package: Matrix\n\n\n\nAttaching package: 'expm'\n\n\nThe following object is masked from 'package:Matrix':\n\n    expm\n\n\nCode\nlibrary(MASS)"
+    "text": "Create a vector of transition probabilities from a single state.\n\nnum.states <- 8\n\nt1 <- runif(num.states)\nt1 <- t1/sum(t1)\n\nround(t1,2)\n\n[1] 0.06 0.04 0.15 0.18 0.22 0.02 0.24 0.11"
   },
   {
     "objectID": "notes/2023-02-09-ST779-Computer-Assignment-1/index.html#section-1",
@@ -431,42 +431,42 @@
     "href": "notes/2023-02-09-ST779-Computer-Assignment-1/index.html#step-2",
     "title": "ST746 - Computer Assignment 1",
     "section": "Step 2",
-    "text": "Step 2\nCreate the entire transition matrix. Note this actually throws out the first vector we created in step 1, but fulfills the overall spirit of the exercise.\n\n\nCode\nP <- matrix(runif(num.states^2), nrow = num.states)\nP <- P/rowSums(P)"
+    "text": "Step 2\nCreate the entire transition matrix. Note this actually throws out the first vector we created in step 1, but fulfills the overall spirit of the exercise.\n\nP <- matrix(runif(num.states^2), nrow = num.states)\nP <- P/rowSums(P)\nP\n\n           [,1]       [,2]       [,3]       [,4]       [,5]      [,6]\n[1,] 0.15279956 0.08106097 0.02846540 0.19820026 0.14034309 0.1574157\n[2,] 0.07368760 0.19007957 0.07653996 0.18723220 0.09766589 0.1194714\n[3,] 0.23803358 0.09339140 0.17106645 0.01457441 0.13617882 0.1954861\n[4,] 0.13141974 0.16660896 0.13884276 0.16781732 0.12714157 0.1488171\n[5,] 0.17946043 0.09418309 0.17649337 0.07903336 0.13153146 0.2187459\n[6,] 0.02376758 0.16818856 0.22344578 0.07212708 0.01807736 0.2201051\n[7,] 0.15057234 0.11368307 0.10795242 0.09601255 0.21064836 0.1249091\n[8,] 0.15395818 0.10185640 0.09376380 0.19794767 0.12118873 0.1806934\n           [,7]        [,8]\n[1,] 0.04336023 0.198354770\n[2,] 0.14231665 0.113006700\n[3,] 0.12539239 0.025876811\n[4,] 0.11100222 0.008350338\n[5,] 0.11723433 0.003318034\n[6,] 0.22313210 0.051156434\n[7,] 0.04482035 0.151401804\n[8,] 0.14698518 0.003606669"
   },
   {
     "objectID": "notes/2023-02-09-ST779-Computer-Assignment-1/index.html#step-3",
     "href": "notes/2023-02-09-ST779-Computer-Assignment-1/index.html#step-3",
     "title": "ST746 - Computer Assignment 1",
     "section": "Step 3",
-    "text": "Step 3\nSimulate the Markov chain with initial state \\(X_0 = 1\\). Store the proportion of time the chain was in state \\(j\\), \\(j=1,\\dots,8\\).\n\n\nCode\ncurrent.state <- 1\nnum.steps <- 10000\nvisits1 <- rep(0, num.states)\n\nfor (i in 1:num.steps){\n\n  visits1[current.state] <- visits1[current.state] + 1\n  current.state <- sample(1:num.states, 1, prob = P[current.state,])\n    \n}\n\nround(visits1/sum(visits1),3)\n\n\n[1] 0.122 0.121 0.138 0.170 0.108 0.096 0.127 0.116"
+    "text": "Step 3\nSimulate the Markov chain with initial state \\(X_0 = 1\\). Store the proportion of time the chain was in state \\(j\\), \\(j=1,\\dots,8\\).\n\ncurrent.state <- 1\nnum.steps <- 10000\nvisits1 <- rep(0, num.states)\n\nfor (i in 1:num.steps){\n\n  visits1[current.state] <- visits1[current.state] + 1\n  current.state <- sample(1:num.states, 1, prob = P[current.state,])\n    \n}\n\nround(visits1/sum(visits1),3)\n\n[1] 0.134 0.135 0.127 0.118 0.117 0.176 0.121 0.073"
   },
   {
     "objectID": "notes/2023-02-09-ST779-Computer-Assignment-1/index.html#step-4",
     "href": "notes/2023-02-09-ST779-Computer-Assignment-1/index.html#step-4",
     "title": "ST746 - Computer Assignment 1",
     "section": "Step 4",
-    "text": "Step 4\nSimulate the Markov chain with initial states \\(X_0 = 2,\\dots,8\\). For each initial state, store the proportion of time the chain was in state \\(j\\), \\(j=1,\\dots,8\\).\n\n\nCode\nvisits2    <- matrix(0, nrow=num.states, ncol=num.states)\nnum.steps <- 10000\n\nfor (j in 1:num.states){\n  current.state <- j\n  \n  for (i in 1:num.steps){\n\n    visits2[j, current.state] <- visits2[j, current.state] + 1\n    current.state <- sample(1:num.states, 1, prob = P[current.state,])\n    \n  }\n  \n}\n\nround(visits2/rowSums(visits2),3)\n\n\n      [,1]  [,2]  [,3]  [,4]  [,5]  [,6]  [,7]  [,8]\n[1,] 0.117 0.126 0.144 0.162 0.115 0.099 0.123 0.113\n[2,] 0.129 0.128 0.139 0.166 0.106 0.093 0.128 0.111\n[3,] 0.121 0.122 0.141 0.168 0.107 0.100 0.128 0.112\n[4,] 0.120 0.125 0.137 0.174 0.105 0.100 0.124 0.116\n[5,] 0.115 0.125 0.145 0.171 0.110 0.090 0.132 0.110\n[6,] 0.119 0.128 0.135 0.172 0.109 0.098 0.125 0.114\n[7,] 0.123 0.122 0.134 0.171 0.108 0.101 0.130 0.112\n[8,] 0.124 0.125 0.138 0.170 0.109 0.095 0.124 0.115"
+    "text": "Step 4\nSimulate the Markov chain with initial states \\(X_0 = 2,\\dots,8\\). For each initial state, store the proportion of time the chain was in state \\(j\\), \\(j=1,\\dots,8\\).\n\nvisits2    <- matrix(0, nrow=num.states-1, ncol=num.states)\nnum.steps <- 10000\n\nfor (j in 1:(num.states-1)){\n  current.state <- j\n  \n  for (i in 1:num.steps){\n\n    visits2[j, current.state] <- visits2[j, current.state] + 1\n    current.state <- sample(1:num.states, 1, prob = P[current.state,])\n    \n  }\n  \n}\n\nround(visits2/rowSums(visits2),3)\n\n      [,1]  [,2]  [,3]  [,4]  [,5]  [,6]  [,7]  [,8]\n[1,] 0.134 0.124 0.134 0.122 0.118 0.174 0.122 0.072\n[2,] 0.133 0.123 0.140 0.116 0.117 0.180 0.119 0.073\n[3,] 0.134 0.131 0.130 0.125 0.116 0.168 0.125 0.070\n[4,] 0.137 0.130 0.135 0.121 0.120 0.168 0.119 0.071\n[5,] 0.133 0.132 0.131 0.124 0.118 0.166 0.122 0.073\n[6,] 0.136 0.122 0.132 0.123 0.122 0.169 0.123 0.074\n[7,] 0.132 0.137 0.127 0.120 0.120 0.168 0.124 0.072"
   },
   {
     "objectID": "notes/2023-02-09-ST779-Computer-Assignment-1/index.html#step-5",
     "href": "notes/2023-02-09-ST779-Computer-Assignment-1/index.html#step-5",
     "title": "ST746 - Computer Assignment 1",
     "section": "Step 5",
-    "text": "Step 5\nCompare the proportion vectors from questions 3 and 4.\n\n\nCode\nboxplot(visits2/rowSums(visits2))\npoints(visits1/sum(visits1), col = \"red\", cex = 8, pch = \".\")"
+    "text": "Step 5\nCompare the proportion vectors from questions 3 and 4.\n\nboxplot(visits2/rowSums(visits2))\npoints(visits1/sum(visits1), col = \"red\", cex = 8, pch = \".\")"
   },
   {
     "objectID": "notes/2023-02-09-ST779-Computer-Assignment-1/index.html#step-6",
     "href": "notes/2023-02-09-ST779-Computer-Assignment-1/index.html#step-6",
     "title": "ST746 - Computer Assignment 1",
     "section": "Step 6",
-    "text": "Step 6\nCompute the \\(P^{100}\\) matrix multiplication. Are its rows approx equal? How do they compare the row vectors from step 5?\n\n\nCode\nP %^% 100\n\n\n          [,1]      [,2]      [,3]      [,4]      [,5]       [,6]      [,7]\n[1,] 0.1231939 0.1237744 0.1390715 0.1689908 0.1086917 0.09600087 0.1270706\n[2,] 0.1231939 0.1237744 0.1390715 0.1689908 0.1086917 0.09600087 0.1270706\n[3,] 0.1231939 0.1237744 0.1390715 0.1689908 0.1086917 0.09600087 0.1270706\n[4,] 0.1231939 0.1237744 0.1390715 0.1689908 0.1086917 0.09600087 0.1270706\n[5,] 0.1231939 0.1237744 0.1390715 0.1689908 0.1086917 0.09600087 0.1270706\n[6,] 0.1231939 0.1237744 0.1390715 0.1689908 0.1086917 0.09600087 0.1270706\n[7,] 0.1231939 0.1237744 0.1390715 0.1689908 0.1086917 0.09600087 0.1270706\n[8,] 0.1231939 0.1237744 0.1390715 0.1689908 0.1086917 0.09600087 0.1270706\n          [,8]\n[1,] 0.1132063\n[2,] 0.1132063\n[3,] 0.1132063\n[4,] 0.1132063\n[5,] 0.1132063\n[6,] 0.1132063\n[7,] 0.1132063\n[8,] 0.1132063"
+    "text": "Step 6\nCompute the \\(P^{100}\\) matrix multiplication. Are its rows approx equal? How do they compare the row vectors from step 5?\n\nP %^% 100\n\n          [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]\n[1,] 0.1320161 0.1291608 0.1324116 0.1205057 0.1178048 0.1722635 0.1225944\n[2,] 0.1320161 0.1291608 0.1324116 0.1205057 0.1178048 0.1722635 0.1225944\n[3,] 0.1320161 0.1291608 0.1324116 0.1205057 0.1178048 0.1722635 0.1225944\n[4,] 0.1320161 0.1291608 0.1324116 0.1205057 0.1178048 0.1722635 0.1225944\n[5,] 0.1320161 0.1291608 0.1324116 0.1205057 0.1178048 0.1722635 0.1225944\n[6,] 0.1320161 0.1291608 0.1324116 0.1205057 0.1178048 0.1722635 0.1225944\n[7,] 0.1320161 0.1291608 0.1324116 0.1205057 0.1178048 0.1722635 0.1225944\n[8,] 0.1320161 0.1291608 0.1324116 0.1205057 0.1178048 0.1722635 0.1225944\n           [,8]\n[1,] 0.07324315\n[2,] 0.07324315\n[3,] 0.07324315\n[4,] 0.07324315\n[5,] 0.07324315\n[6,] 0.07324315\n[7,] 0.07324315\n[8,] 0.07324315"
   },
   {
     "objectID": "notes/2023-02-09-ST779-Computer-Assignment-1/index.html#step-7",
     "href": "notes/2023-02-09-ST779-Computer-Assignment-1/index.html#step-7",
     "title": "ST746 - Computer Assignment 1",
     "section": "Step 7",
-    "text": "Step 7\nSolve the equation of stationarity \\(\\boldsymbol\\mu = \\boldsymbol\\mu \\mathbf{P}\\). Is the solution nearly equal to that in step 6?\n\n\nCode\ne    <- eigen(P)\nlvec <- ginv(e$vectors)\n\nas.numeric(lvec[1,]/sum(lvec[1,]))\n\n\n[1] 0.12319390 0.12377437 0.13907153 0.16899081 0.10869168 0.09600087 0.12707056\n[8] 0.11320629"
+    "text": "Step 7\nSolve the equation of stationarity \\(\\boldsymbol\\mu = \\boldsymbol\\mu \\mathbf{P}\\). Is the solution nearly equal to that in step 6?\n\ne    <- eigen(P)\nlvec <- MASS::ginv(e$vectors)\n\nas.numeric(lvec[1,]/sum(lvec[1,]))\n\n[1] 0.13201608 0.12916077 0.13241161 0.12050573 0.11780475 0.17226347 0.12259444\n[8] 0.07324315"
   },
   {
     "objectID": "notes/2023-02-09-ST779-Computer-Assignment-1/index.html#step-8",

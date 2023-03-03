@@ -225,43 +225,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(expm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: Matrix</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'expm'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:Matrix':
-
-    expm</code></pre>
-</div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
 <section id="step-1" class="level2">
 <h2 class="anchored" data-anchor-id="step-1">Step 1</h2>
 <p>Create a vector of transition probabilities from a single state.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>num.states <span class="ot">&lt;-</span> <span class="dv">8</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(num.states)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> t1<span class="sc">/</span><span class="fu">sum</span>(t1)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(t1,<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>num.states <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(num.states)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> t1<span class="sc">/</span><span class="fu">sum</span>(t1)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(t1,<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.09 0.29 0.01 0.04 0.16 0.10 0.30 0.01</code></pre>
+<pre><code>[1] 0.06 0.04 0.15 0.18 0.22 0.02 0.24 0.11</code></pre>
 </div>
 </div>
 </section>
@@ -269,34 +244,49 @@ Attaching package: 'expm'</code></pre>
 <h2 class="anchored" data-anchor-id="step-2">Step 2</h2>
 <p>Create the entire transition matrix. Note this actually throws out the first vector we created in step 1, but fulfills the overall spirit of the exercise.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">runif</span>(num.states<span class="sc">^</span><span class="dv">2</span>), <span class="at">nrow =</span> num.states)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> P<span class="sc">/</span><span class="fu">rowSums</span>(P)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">runif</span>(num.states<span class="sc">^</span><span class="dv">2</span>), <span class="at">nrow =</span> num.states)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> P<span class="sc">/</span><span class="fu">rowSums</span>(P)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>P</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           [,1]       [,2]       [,3]       [,4]       [,5]      [,6]
+[1,] 0.15279956 0.08106097 0.02846540 0.19820026 0.14034309 0.1574157
+[2,] 0.07368760 0.19007957 0.07653996 0.18723220 0.09766589 0.1194714
+[3,] 0.23803358 0.09339140 0.17106645 0.01457441 0.13617882 0.1954861
+[4,] 0.13141974 0.16660896 0.13884276 0.16781732 0.12714157 0.1488171
+[5,] 0.17946043 0.09418309 0.17649337 0.07903336 0.13153146 0.2187459
+[6,] 0.02376758 0.16818856 0.22344578 0.07212708 0.01807736 0.2201051
+[7,] 0.15057234 0.11368307 0.10795242 0.09601255 0.21064836 0.1249091
+[8,] 0.15395818 0.10185640 0.09376380 0.19794767 0.12118873 0.1806934
+           [,7]        [,8]
+[1,] 0.04336023 0.198354770
+[2,] 0.14231665 0.113006700
+[3,] 0.12539239 0.025876811
+[4,] 0.11100222 0.008350338
+[5,] 0.11723433 0.003318034
+[6,] 0.22313210 0.051156434
+[7,] 0.04482035 0.151401804
+[8,] 0.14698518 0.003606669</code></pre>
+</div>
 </div>
 </section>
 <section id="step-3" class="level2">
 <h2 class="anchored" data-anchor-id="step-3">Step 3</h2>
 <p>Simulate the Markov chain with initial state <span class="math inline">\(X_0 = 1\)</span>. Store the proportion of time the chain was in state <span class="math inline">\(j\)</span>, <span class="math inline">\(j=1,\dots,8\)</span>.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>current.state <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>num.steps <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>visits1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, num.states)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num.steps){</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  visits1[current.state] <span class="ot">&lt;-</span> visits1[current.state] <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  current.state <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>num.states, <span class="dv">1</span>, <span class="at">prob =</span> P[current.state,])</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(visits1<span class="sc">/</span><span class="fu">sum</span>(visits1),<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>current.state <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>num.steps <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>visits1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, num.states)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num.steps){</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  visits1[current.state] <span class="ot">&lt;-</span> visits1[current.state] <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  current.state <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>num.states, <span class="dv">1</span>, <span class="at">prob =</span> P[current.state,])</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(visits1<span class="sc">/</span><span class="fu">sum</span>(visits1),<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.122 0.121 0.138 0.170 0.108 0.096 0.127 0.116</code></pre>
+<pre><code>[1] 0.134 0.135 0.127 0.118 0.117 0.176 0.121 0.073</code></pre>
 </div>
 </div>
 </section>
@@ -304,35 +294,31 @@ Attaching package: 'expm'</code></pre>
 <h2 class="anchored" data-anchor-id="step-4">Step 4</h2>
 <p>Simulate the Markov chain with initial states <span class="math inline">\(X_0 = 2,\dots,8\)</span>. For each initial state, store the proportion of time the chain was in state <span class="math inline">\(j\)</span>, <span class="math inline">\(j=1,\dots,8\)</span>.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>visits2    <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow=</span>num.states, <span class="at">ncol=</span>num.states)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>num.steps <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num.states){</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  current.state <span class="ot">&lt;-</span> j</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num.steps){</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    visits2[j, current.state] <span class="ot">&lt;-</span> visits2[j, current.state] <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    current.state <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>num.states, <span class="dv">1</span>, <span class="at">prob =</span> P[current.state,])</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(visits2<span class="sc">/</span><span class="fu">rowSums</span>(visits2),<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>visits2    <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow=</span>num.states<span class="dv">-1</span>, <span class="at">ncol=</span>num.states)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>num.steps <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(num.states<span class="dv">-1</span>)){</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  current.state <span class="ot">&lt;-</span> j</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num.steps){</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    visits2[j, current.state] <span class="ot">&lt;-</span> visits2[j, current.state] <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    current.state <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>num.states, <span class="dv">1</span>, <span class="at">prob =</span> P[current.state,])</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(visits2<span class="sc">/</span><span class="fu">rowSums</span>(visits2),<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      [,1]  [,2]  [,3]  [,4]  [,5]  [,6]  [,7]  [,8]
-[1,] 0.117 0.126 0.144 0.162 0.115 0.099 0.123 0.113
-[2,] 0.129 0.128 0.139 0.166 0.106 0.093 0.128 0.111
-[3,] 0.121 0.122 0.141 0.168 0.107 0.100 0.128 0.112
-[4,] 0.120 0.125 0.137 0.174 0.105 0.100 0.124 0.116
-[5,] 0.115 0.125 0.145 0.171 0.110 0.090 0.132 0.110
-[6,] 0.119 0.128 0.135 0.172 0.109 0.098 0.125 0.114
-[7,] 0.123 0.122 0.134 0.171 0.108 0.101 0.130 0.112
-[8,] 0.124 0.125 0.138 0.170 0.109 0.095 0.124 0.115</code></pre>
+[1,] 0.134 0.124 0.134 0.122 0.118 0.174 0.122 0.072
+[2,] 0.133 0.123 0.140 0.116 0.117 0.180 0.119 0.073
+[3,] 0.134 0.131 0.130 0.125 0.116 0.168 0.125 0.070
+[4,] 0.137 0.130 0.135 0.121 0.120 0.168 0.119 0.071
+[5,] 0.133 0.132 0.131 0.124 0.118 0.166 0.122 0.073
+[6,] 0.136 0.122 0.132 0.123 0.122 0.169 0.123 0.074
+[7,] 0.132 0.137 0.127 0.120 0.120 0.168 0.124 0.072</code></pre>
 </div>
 </div>
 </section>
@@ -340,11 +326,8 @@ Attaching package: 'expm'</code></pre>
 <h2 class="anchored" data-anchor-id="step-5">Step 5</h2>
 <p>Compare the proportion vectors from questions 3 and 4.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(visits2<span class="sc">/</span><span class="fu">rowSums</span>(visits2))</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(visits1<span class="sc">/</span><span class="fu">sum</span>(visits1), <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">cex =</span> <span class="dv">8</span>, <span class="at">pch =</span> <span class="st">"."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(visits2<span class="sc">/</span><span class="fu">rowSums</span>(visits2))</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(visits1<span class="sc">/</span><span class="fu">sum</span>(visits1), <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">cex =</span> <span class="dv">8</span>, <span class="at">pch =</span> <span class="st">"."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -354,29 +337,26 @@ Attaching package: 'expm'</code></pre>
 <h2 class="anchored" data-anchor-id="step-6">Step 6</h2>
 <p>Compute the <span class="math inline">\(P^{100}\)</span> matrix multiplication. Are its rows approx equal? How do they compare the row vectors from step 5?</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>P <span class="sc">%^%</span> <span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>P <span class="sc">%^%</span> <span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>          [,1]      [,2]      [,3]      [,4]      [,5]       [,6]      [,7]
-[1,] 0.1231939 0.1237744 0.1390715 0.1689908 0.1086917 0.09600087 0.1270706
-[2,] 0.1231939 0.1237744 0.1390715 0.1689908 0.1086917 0.09600087 0.1270706
-[3,] 0.1231939 0.1237744 0.1390715 0.1689908 0.1086917 0.09600087 0.1270706
-[4,] 0.1231939 0.1237744 0.1390715 0.1689908 0.1086917 0.09600087 0.1270706
-[5,] 0.1231939 0.1237744 0.1390715 0.1689908 0.1086917 0.09600087 0.1270706
-[6,] 0.1231939 0.1237744 0.1390715 0.1689908 0.1086917 0.09600087 0.1270706
-[7,] 0.1231939 0.1237744 0.1390715 0.1689908 0.1086917 0.09600087 0.1270706
-[8,] 0.1231939 0.1237744 0.1390715 0.1689908 0.1086917 0.09600087 0.1270706
-          [,8]
-[1,] 0.1132063
-[2,] 0.1132063
-[3,] 0.1132063
-[4,] 0.1132063
-[5,] 0.1132063
-[6,] 0.1132063
-[7,] 0.1132063
-[8,] 0.1132063</code></pre>
+<pre><code>          [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
+[1,] 0.1320161 0.1291608 0.1324116 0.1205057 0.1178048 0.1722635 0.1225944
+[2,] 0.1320161 0.1291608 0.1324116 0.1205057 0.1178048 0.1722635 0.1225944
+[3,] 0.1320161 0.1291608 0.1324116 0.1205057 0.1178048 0.1722635 0.1225944
+[4,] 0.1320161 0.1291608 0.1324116 0.1205057 0.1178048 0.1722635 0.1225944
+[5,] 0.1320161 0.1291608 0.1324116 0.1205057 0.1178048 0.1722635 0.1225944
+[6,] 0.1320161 0.1291608 0.1324116 0.1205057 0.1178048 0.1722635 0.1225944
+[7,] 0.1320161 0.1291608 0.1324116 0.1205057 0.1178048 0.1722635 0.1225944
+[8,] 0.1320161 0.1291608 0.1324116 0.1205057 0.1178048 0.1722635 0.1225944
+           [,8]
+[1,] 0.07324315
+[2,] 0.07324315
+[3,] 0.07324315
+[4,] 0.07324315
+[5,] 0.07324315
+[6,] 0.07324315
+[7,] 0.07324315
+[8,] 0.07324315</code></pre>
 </div>
 </div>
 </section>
@@ -384,16 +364,13 @@ Attaching package: 'expm'</code></pre>
 <h2 class="anchored" data-anchor-id="step-7">Step 7</h2>
 <p>Solve the equation of stationarity <span class="math inline">\(\boldsymbol\mu = \boldsymbol\mu \mathbf{P}\)</span>. Is the solution nearly equal to that in step 6?</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>e    <span class="ot">&lt;-</span> <span class="fu">eigen</span>(P)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>lvec <span class="ot">&lt;-</span> <span class="fu">ginv</span>(e<span class="sc">$</span>vectors)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">as.numeric</span>(lvec[<span class="dv">1</span>,]<span class="sc">/</span><span class="fu">sum</span>(lvec[<span class="dv">1</span>,]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>e    <span class="ot">&lt;-</span> <span class="fu">eigen</span>(P)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>lvec <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">ginv</span>(e<span class="sc">$</span>vectors)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">as.numeric</span>(lvec[<span class="dv">1</span>,]<span class="sc">/</span><span class="fu">sum</span>(lvec[<span class="dv">1</span>,]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.12319390 0.12377437 0.13907153 0.16899081 0.10869168 0.09600087 0.12707056
-[8] 0.11320629</code></pre>
+<pre><code>[1] 0.13201608 0.12916077 0.13241161 0.12050573 0.11780475 0.17226347 0.12259444
+[8] 0.07324315</code></pre>
 </div>
 </div>
 </section>
