@@ -157,6 +157,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <a class="nav-link" href="../../learn.html">
  <span class="menu-text">Learn</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../notes.html">
+ <span class="menu-text">Notes</span></a>
+  </li>  
 </ul>
               <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
@@ -233,8 +237,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
 <p>Here we will extend the univariate CAR model to the multivariate case.</p>
-<p>Consider a spatial domain <span class="math inline">\(\mathcal{D} \in \mathbb{R}^2\)</span> that is partitioned into <span class="math inline">\(n\)</span> areal units indexed by <span class="math inline">\(i=1,\dots,n\)</span>. In the univariate case we specified a spatial random effect <span class="math inline">\(\boldsymbol\phi = (\phi_1,\dots,\phi_n)\)</span> meant to capture the spatial dependence. In the multivariate case we specify a spatial random vector <span class="math inline">\(\boldsymbol\phi^T = (\boldsymbol\phi_1, \boldsymbol\phi_2,\dots,\boldsymbol\phi_3)\)</span> where each <span class="math inline">\(\boldsymbol\phi_i = (\phi_{i1}, \phi_{i2},\dots, \phi_{ip})\)</span> is <span class="math inline">\(p \times 1\)</span>.</p>
-<p>WIP</p>
+<p>Consider a spatial domain <span class="math inline">\(\mathcal{D} \in \mathbb{R}^2\)</span> that is partitioned into <span class="math inline">\(n\)</span> areal units. In the univariate case we specified a spatial random effect <span class="math inline">\(\boldsymbol\phi = (\phi_1,\dots,\phi_n)\)</span> meant to capture the spatial dependence. In the multivariate case we specify a spatial random vector <span class="math inline">\(\boldsymbol\phi^T = (\boldsymbol\phi_1, \boldsymbol\phi_2,\dots,\boldsymbol\phi_3)\)</span> where each <span class="math inline">\(\boldsymbol\phi_i = (\phi_{i1}, \phi_{i2},\dots, \phi_{ip})\)</span> is <span class="math inline">\(p \times 1\)</span>.</p>
+<p>The joint distribution of <span class="math inline">\(\boldsymbol\phi_i\)</span> is derived from the full conditional distributions. Under the Markov Random Field (MRF) assumption, the conditional distributions can be specified as <span class="math display">\[
+p(\boldsymbol\phi_i|\boldsymbol\phi_{j\ne i}, \Gamma_i) = N\left(\sum_{i \sim j} \mathbf{B}_{ij}\boldsymbol\phi_j, \Gamma_i\right), \quad i,j = 1,\dots,n.
+\]</span></p>
+<p>where <span class="math inline">\(\Gamma_i\)</span> and <span class="math inline">\(\mathbf{B}_{ij}\)</span> are <span class="math inline">\(p \times p\)</span> matrices.</p>
+<p>Recall the role of <span class="math inline">\(\Gamma_i\)</span> and <span class="math inline">\(\mathbf{B}_{ij}\)</span>. The former is…</p>
+<p>Specifying the conditional distributions in this way implies the unique joint distribution, via Brook’s Lemma, to be <span class="math display">\[
+p(\boldsymbol\phi \;| \;\{\Gamma_i\}) \propto \exp\left\{-\frac{1}{2}\boldsymbol\phi^T\Gamma^{-1}(\mathbf{I} - \tilde{\mathbf{B}})\phi\right\}
+\]</span> where <span class="math inline">\(\Gamma\)</span> is block-diagonal with block <span class="math inline">\(\Gamma_i\)</span>, and <span class="math inline">\(\tilde{\mathbf{B}}\)</span> is <span class="math inline">\(np \times np\)</span> with the <span class="math inline">\((i,j)\)</span>-th block <span class="math inline">\(\mathbf{B}_{ij}\)</span>.</p>
 
 
 </section>
