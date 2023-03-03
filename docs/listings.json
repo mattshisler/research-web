@@ -17,16 +17,16 @@
   {
     "listing": "/research.html",
     "items": [
-      "/research/2023-02-02-Step-0-Linear-Regression-Gibbs-Sampling/index.html",
-      "/research/2023-02-02-Step-1-Hierarchical-Linear-Regression/index.html",
-      "/research/2023-02-02-Step-2-Single Parent Design Matrix/index.html",
-      "/research/2023-02-02-Step-3-Add-a-2nd-Level-Linear-Trend/index.html",
-      "/research/2023-02-02-Step-4-Application-to-the-Linearized-Double-Logistic-Function/index.html",
-      "/research/2023-02-02-Step-5-Verify-Convergence/index.html",
-      "/research/2023-02-02-Step-6-Application to the Double-Logistic Function/index.html",
       "/research/2023-02-02-Step-7-Bayesian spatial CAR model/index.html",
+      "/research/2023-02-03-Step-9-The Multivariate CAR Model/index.html",
+      "/research/2023-02-02-Step-1-Hierarchical-Linear-Regression/index.html",
+      "/research/2023-02-02-Step-4-Application-to-the-Linearized-Double-Logistic-Function/index.html",
       "/research/2023-02-02-Step-8-Simulating-Multivariate-Areal-Data/index.html",
-      "/research/2023-02-03-Step-9-The Multivariate CAR Model/index.html"
+      "/research/2023-02-02-Step-3-Add-a-2nd-Level-Linear-Trend/index.html",
+      "/research/2023-02-02-Step-6-Application to the Double-Logistic Function/index.html",
+      "/research/2023-02-02-Step-2-Single Parent Design Matrix/index.html",
+      "/research/2023-02-02-Step-5-Verify-Convergence/index.html",
+      "/research/2023-02-02-Step-0-Linear-Regression-Gibbs-Sampling/index.html"
     ]
   },
   {
@@ -39,8 +39,8 @@
   {
     "listing": "/notes.html",
     "items": [
-      "/notes/2023-02-09-ST779-Computer-Assignment-1/index.html",
-      "/notes/YYYY-MM-DD-Template/index.html"
+      "/notes/YYYY-MM-DD-Template/index.html",
+      "/notes/2023-02-09-ST779-Computer-Assignment-1/index.html"
     ]
   }
 ]

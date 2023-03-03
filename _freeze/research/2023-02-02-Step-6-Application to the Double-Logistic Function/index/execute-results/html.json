@@ -1,5 +1,5 @@
 {
-  "hash": "cf8fadae83343b74a0c6147dc66f6895",
+  "hash": "cbe8ba81d4b5f2fe13fabfe90abc7b0d",
   "result": {
     "markdown": "---\ntitle: \"Step 6 - Application to the (orignal) Double-logistic function\"\ndescription: \"TODO: \"\nauthor:\n  - name: Matthew Shisler\n    affiliation: North Carloina State University - Department of Statistics\n    affiliation-url: https://statistics.sciences.ncsu.edu/ \ncategories: [Bayesian, MCMC, Hierarchical Model] # self-defined categories\ndraft: false \nformat:\n  html: \n    code-fold: true\nexecute: \n  cache: true\n  freeze: auto\n---\n\n::: {.cell hash='index_cache/html/load-packages_20393ab02cca7f43d0ba6312721af7c1'}\n\n```{.r .cell-code  code-summary=\"Code: Load the packages\"}\nlibrary(tictoc)\nlibrary(Rfast)\nlibrary(numDeriv)\n```\n:::\n\n\nTODO",
     "supporting": [],
