@@ -242,11 +242,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 p(\boldsymbol\phi_i|\boldsymbol\phi_{j\ne i}, \Gamma_i) = N\left(\sum_{i \sim j} \mathbf{B}_{ij}\boldsymbol\phi_j, \Gamma_i\right), \quad i,j = 1,\dots,n.
 \]</span></p>
 <p>where <span class="math inline">\(\Gamma_i\)</span> and <span class="math inline">\(\mathbf{B}_{ij}\)</span> are <span class="math inline">\(p \times p\)</span> matrices.</p>
-<p>Recall the role of <span class="math inline">\(\Gamma_i\)</span> and <span class="math inline">\(\mathbf{B}_{ij}\)</span>. The former is…</p>
+<p>Recall the role of <span class="math inline">\(\Gamma_i\)</span> and <span class="math inline">\(\mathbf{B}_{ij}\)</span> are analogous to the roles of <span class="math inline">\(\tau_i^2\)</span> and <span class="math inline">\(b_{ij}\)</span>, respectively, in the univariate CAR models. The matrix <span class="math inline">\(\Gamma_i\)</span> is the with-in unit covariance matrix which describes the dependence of the variables in the vector <span class="math inline">\(\boldsymbophi_i\)</span>. The matrix <span class="math inline">\(\mathbf{B}_{ij}\)</span> is the matrix that allows us to weight the neighboring observations of location <span class="math inline">\(i\)</span> that are conditioned on in the full conditional. A convenient special case is to set <span class="math inline">\(\mathbf{B}_{ij} = b_{ij}\mathbf{I}_p\)</span> where <span class="math inline">\(b_{ij} = w_{ij}/w_{i+}\)</span>. Recall, for a neighborhood matrix <span class="math inline">\(\mathbf{W} = \{w_ij\}\)</span>, <span class="math display">\[
+w_{ij} =
+\begin{cases}
+1 \quad \text{if} \quad j \in \mathcal{N}(i),\\
+0 \quad \text{otherwise}.
+\end{cases}
+\]</span> and <span class="math inline">\(w_{i+} = \sum_{j=1}^pw_{ij}\)</span>, i.e.&nbsp;the number of neighbors of location <span class="math inline">\(i\)</span>, <span class="math inline">\(|\mathcal{N}(i)|\)</span>.</p>
 <p>Specifying the conditional distributions in this way implies the unique joint distribution, via Brook’s Lemma, to be <span class="math display">\[
 p(\boldsymbol\phi \;| \;\{\Gamma_i\}) \propto \exp\left\{-\frac{1}{2}\boldsymbol\phi^T\Gamma^{-1}(\mathbf{I} - \tilde{\mathbf{B}})\phi\right\}
 \]</span> where <span class="math inline">\(\Gamma\)</span> is block-diagonal with block <span class="math inline">\(\Gamma_i\)</span>, and <span class="math inline">\(\tilde{\mathbf{B}}\)</span> is <span class="math inline">\(np \times np\)</span> with the <span class="math inline">\((i,j)\)</span>-th block <span class="math inline">\(\mathbf{B}_{ij}\)</span>.</p>
-<p>This is a test push from macbook pro.</p>
 
 
 </section>
